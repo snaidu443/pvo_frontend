@@ -1,0 +1,246 @@
+{
+  "TAK-481": {
+    "assetId": "TAK-481",
+    "activePolicyVersions": {
+      "IRA": "PV-IRA-32",
+      "MFN": "PV-MFN-18",
+      "JCA": "PV-JCA-21",
+      "EU-GPL": "PV-GPL-12"
+    },
+    "activeRuleVersions": {
+      "R-IRA-01": "3.2",
+      "R-IRA-02": "2.4",
+      "R-MFN-01": "1.8",
+      "R-MFN-02": "1.5",
+      "R-JCA-01": "2.1",
+      "R-JCA-02": "2.1",
+      "R-GPL-01": "1.2"
+    },
+    "firedRules": [
+      "R-IRA-01",
+      "R-MFN-01",
+      "R-JCA-01",
+      "R-GPL-01"
+    ],
+    "skippedRules": [],
+    "failedRules": [],
+    "outputSummary": "IRA in scope · MFN exposure · JCA in scope · EU-GPL directional protection",
+    "explanationLog": [
+      "IRA: $205M Medicare spend crosses the illustrative IRA threshold.",
+      "MFN: Part D coverage and antineoplastic class trigger MFN exposure review.",
+      "JCA: EU oncology active substance is within the phased JCA scope.",
+      "EU-GPL: supply condition remains a human-review point."
+    ]
+  },
+  "TAK-227": {
+    "assetId": "TAK-227",
+    "activePolicyVersions": {
+      "IRA": "PV-IRA-32",
+      "MFN": "PV-MFN-18",
+      "JCA": "PV-JCA-21",
+      "EU-GPL": "PV-GPL-12"
+    },
+    "activeRuleVersions": {
+      "R-IRA-01": "3.2",
+      "R-IRA-02": "2.4",
+      "R-MFN-01": "1.8",
+      "R-MFN-02": "1.5",
+      "R-JCA-01": "2.1",
+      "R-JCA-02": "2.1",
+      "R-GPL-01": "1.2"
+    },
+    "firedRules": [
+      "R-IRA-01",
+      "R-JCA-01",
+      "R-GPL-01"
+    ],
+    "skippedRules": [
+      "R-MFN-01",
+      "R-MFN-02"
+    ],
+    "failedRules": [],
+    "outputSummary": "TAK-227 Rare Hematology · 2 in scope · 1 pending · High directional exposure",
+    "explanationLog": [
+      "IRA: $205M Medicare spend crosses the illustrative IRA threshold.",
+      "MFN: Part D coverage and antineoplastic class trigger MFN exposure review.",
+      "JCA: EU oncology active substance is within the phased JCA scope.",
+      "EU-GPL: supply condition remains a human-review point."
+    ]
+  },
+  "TAK-909": {
+    "assetId": "TAK-909",
+    "activePolicyVersions": {
+      "IRA": "PV-IRA-32",
+      "MFN": "PV-MFN-18",
+      "JCA": "PV-JCA-21",
+      "EU-GPL": "PV-GPL-12"
+    },
+    "activeRuleVersions": {
+      "R-IRA-01": "3.2",
+      "R-IRA-02": "2.4",
+      "R-MFN-01": "1.8",
+      "R-MFN-02": "1.5",
+      "R-JCA-01": "2.1",
+      "R-JCA-02": "2.1",
+      "R-GPL-01": "1.2"
+    },
+    "firedRules": [
+      "R-MFN-01",
+      "R-JCA-01"
+    ],
+    "skippedRules": [
+      "R-IRA-01",
+      "R-IRA-02",
+      "R-GPL-01",
+      "R-GPL-02"
+    ],
+    "failedRules": [],
+    "outputSummary": "TAK-909 Immunology · 2 policies assessed · Medium directional exposure",
+    "explanationLog": [
+      "IRA: $205M Medicare spend crosses the illustrative IRA threshold.",
+      "MFN: Part D coverage and antineoplastic class trigger MFN exposure review.",
+      "JCA: EU oncology active substance is within the phased JCA scope.",
+      "EU-GPL: supply condition remains a human-review point."
+    ]
+  },
+  "TAK-315": {
+    "assetId": "TAK-315",
+    "activePolicyVersions": {
+      "IRA": "PV-IRA-32",
+      "MFN": "PV-MFN-18",
+      "JCA": "PV-JCA-21",
+      "EU-GPL": "PV-GPL-12"
+    },
+    "activeRuleVersions": {
+      "R-IRA-01": "3.2",
+      "R-IRA-02": "2.4",
+      "R-MFN-01": "1.8",
+      "R-MFN-02": "1.5",
+      "R-JCA-01": "2.1",
+      "R-JCA-02": "2.1",
+      "R-GPL-01": "1.2"
+    },
+    "firedRules": [
+      "R-JCA-01",
+      "R-GPL-01"
+    ],
+    "skippedRules": [
+      "R-IRA-01",
+      "R-IRA-02",
+      "R-MFN-01",
+      "R-MFN-02"
+    ],
+    "failedRules": [],
+    "outputSummary": "TAK-315 Cell Therapy · Scope review pending · High directional exposure",
+    "explanationLog": [
+      "IRA: $205M Medicare spend crosses the illustrative IRA threshold.",
+      "MFN: Part D coverage and antineoplastic class trigger MFN exposure review.",
+      "JCA: EU oncology active substance is within the phased JCA scope.",
+      "EU-GPL: supply condition remains a human-review point."
+    ]
+  },
+  "TAK-602": {
+    "assetId": "TAK-602",
+    "activePolicyVersions": {
+      "IRA": "PV-IRA-32",
+      "MFN": "PV-MFN-18",
+      "JCA": "PV-JCA-21",
+      "EU-GPL": "PV-GPL-12"
+    },
+    "activeRuleVersions": {
+      "R-IRA-01": "3.2",
+      "R-IRA-02": "2.4",
+      "R-MFN-01": "1.8",
+      "R-MFN-02": "1.5",
+      "R-JCA-01": "2.1",
+      "R-JCA-02": "2.1",
+      "R-GPL-01": "1.2"
+    },
+    "firedRules": [
+      "R-IRA-01",
+      "R-MFN-01"
+    ],
+    "skippedRules": [
+      "R-JCA-01",
+      "R-JCA-02",
+      "R-GPL-01",
+      "R-GPL-02"
+    ],
+    "failedRules": [],
+    "outputSummary": "TAK-602 CNS · IRA at risk · MFN in scope · Medium directional exposure",
+    "explanationLog": [
+      "IRA: $205M Medicare spend crosses the illustrative IRA threshold.",
+      "MFN: Part D coverage and antineoplastic class trigger MFN exposure review.",
+      "JCA: EU oncology active substance is within the phased JCA scope.",
+      "EU-GPL: supply condition remains a human-review point."
+    ]
+  },
+  "TAK-711": {
+    "assetId": "TAK-711",
+    "activePolicyVersions": {
+      "IRA": "PV-IRA-32",
+      "MFN": "PV-MFN-18",
+      "JCA": "PV-JCA-21",
+      "EU-GPL": "PV-GPL-12"
+    },
+    "activeRuleVersions": {
+      "R-IRA-01": "3.2",
+      "R-IRA-02": "2.4",
+      "R-MFN-01": "1.8",
+      "R-MFN-02": "1.5",
+      "R-JCA-01": "2.1",
+      "R-JCA-02": "2.1",
+      "R-GPL-01": "1.2"
+    },
+    "firedRules": [
+      "R-IRA-01",
+      "R-JCA-01",
+      "R-GPL-01"
+    ],
+    "skippedRules": [
+      "R-MFN-01",
+      "R-MFN-02"
+    ],
+    "failedRules": [],
+    "outputSummary": "TAK-711 Orphan Metabolic · 3 policies assessed · Low directional exposure",
+    "explanationLog": [
+      "IRA: $205M Medicare spend crosses the illustrative IRA threshold.",
+      "MFN: Part D coverage and antineoplastic class trigger MFN exposure review.",
+      "JCA: EU oncology active substance is within the phased JCA scope.",
+      "EU-GPL: supply condition remains a human-review point."
+    ]
+  },
+  "TEST-100": {
+    "assetId": "TEST-100",
+    "activePolicyVersions": {
+      "IRA": "PV-IRA-32",
+      "MFN": "PV-MFN-18",
+      "JCA": "PV-JCA-21",
+      "EU-GPL": "PV-GPL-12"
+    },
+    "activeRuleVersions": {
+      "R-IRA-01": "3.2",
+      "R-IRA-02": "2.4",
+      "R-MFN-01": "1.8",
+      "R-MFN-02": "1.5",
+      "R-JCA-01": "2.1",
+      "R-JCA-02": "2.1",
+      "R-GPL-01": "1.2"
+    },
+    "firedRules": [
+      "R-IRA-01",
+      "R-MFN-01",
+      "R-JCA-01",
+      "R-GPL-01"
+    ],
+    "skippedRules": [],
+    "failedRules": [],
+    "outputSummary": "TEST-100 Test Asset · 4 policies assessed · High directional exposure",
+    "explanationLog": [
+      "IRA: A non-orphan indication is present, $295M assumed Medicare spend crosses the $200M threshold from 2035, and no generic enters before selection, so the asset is in IRA scope.",
+      "MFN: Part B coverage (assumption) and assumed Medicare spend above $100M place the asset in MFN review (GLOBE).",
+      "JCA: The orphan medicine trigger places Indication 1 within the phased JCA scope.",
+      "EU-GPL: A new EU MAA from 2029 meets the EU-GPL condition; the supply condition remains a human-review point."
+    ]
+  }
+}

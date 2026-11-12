@@ -1,0 +1,57 @@
+{
+  "D": {
+    "title": "Optimize indication sequencing",
+    "copy": "Leading with the orphan indication delays IRA and MFN eligibility and earns extra EU-GPL exclusivity protection.",
+    "policies": [
+      "IRA",
+      "MFN",
+      "EU-GPL"
+    ],
+    "synergy": "Prioritizing orphan indications avoids IRA or MFN selection and earns EU orphan exclusivity.",
+    "owner": "",
+    "timing": ""
+  },
+  "G": {
+    "title": "Ensure pre-launch evidence packages are payer-optimized",
+    "copy": "Comparative data vs. SoC strengthens JCA answers and the US-vs-reference price position.",
+    "policies": [
+      "MFN",
+      "JCA",
+      "EU-GPL"
+    ],
+    "synergy": "One comparative evidence package serves JCA, EU-GPL rewards and MFN price defence.",
+    "owner": "",
+    "timing": ""
+  },
+  "A": {
+    "title": "Consider asset selection",
+    "copy": "Small-molecule status starts the 7-year IRA clock; a biologic profile would extend the full-price runway.",
+    "policies": [
+      "IRA"
+    ],
+    "owner": "Clinical",
+    "timing": "Before Phase 3 start"
+  },
+  "B": {
+    "title": "Consider post-launch evidence generation",
+    "copy": "Real-world outcomes support IRA and MFN negotiations and JCA re-assessment.",
+    "policies": [
+      "IRA",
+      "MFN",
+      "JCA"
+    ],
+    "owner": "HEOR",
+    "timing": "At launch"
+  },
+  "I": {
+    "rank": "F",
+    "title": "Consider region-specific launch strategies",
+    "copy": "EU-GPL rewards filing in the EU within 90 days of first global filing, but MFN advises delaying ex-US launch until evidence is robust.",
+    "policies": [
+      "JCA",
+      "EU-GPL"
+    ],
+    "owner": "Regulatory",
+    "timing": "Before EMA pre-submission"
+  }
+}

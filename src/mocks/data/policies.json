@@ -1,0 +1,46 @@
+[
+  {
+    "code": "IRA",
+    "name": "Medicare price negotiation",
+    "region": "United States",
+    "color": "#bc303d",
+    "impact": "High impact",
+    "value": "−$353M",
+    "summary": "Negotiation starts 7 years after approval (small molecule) or 11 (biologic).",
+    "trigger": ">$200M Medicare spend, non-orphan",
+    "implication": "Shorter full-price runway."
+  },
+  {
+    "code": "MFN",
+    "name": "Most Favored Nation pricing",
+    "region": "United States",
+    "color": "#3b627b",
+    "impact": "Medium impact",
+    "value": "−$210M",
+    "summary": "US prices tied to reference countries (GLOBE, GUARD).",
+    "trigger": ">$100M Part B / $69M Part D spend, in-scope class",
+    "implication": "US net price falls toward benchmarks."
+  },
+  {
+    "code": "JCA",
+    "name": "EU Joint Clinical Assessment",
+    "region": "European Union",
+    "color": "#65805d",
+    "impact": "Medium impact",
+    "value": "−$95M",
+    "summary": "EU-wide clinical assessment alongside EMA approval.",
+    "trigger": "New oncology substances & ATMPs (now); orphan (2028); all (2030)",
+    "implication": "Evidence package drives HTA outcome and timing."
+  },
+  {
+    "code": "EU-GPL",
+    "name": "EU General Pharmaceutical Legislation",
+    "region": "European Union",
+    "color": "#9a7847",
+    "impact": "Low impact",
+    "value": "+ $60M",
+    "summary": "Extra protection for unmet need, comparative trials, new indications.",
+    "trigger": "New EU MAA from 2029",
+    "implication": "Protection varies with evidence and supply."
+  }
+]

@@ -1,0 +1,216 @@
+{
+  "judgmentQuestions": [
+    {
+      "group": "Clinical differentiation & comparator",
+      "text": "Degree of clinical differentiation vs. comparator?",
+      "options": [
+        "High",
+        "Medium",
+        "Low",
+        "Unknown"
+      ],
+      "ai": "Low",
+      "evidence": "Suggested Low: limited clinical differentiation vs. the comparator.",
+      "source": "Client guidance",
+      "confidence": "Med",
+      "policies": [
+        "IRA",
+        "MFN",
+        "JCA"
+      ]
+    },
+    {
+      "group": "Clinical differentiation & comparator",
+      "text": "High unmet need in this indication?",
+      "perIndication": true,
+      "ai": "Yes",
+      "evidence": "No approved therapies in the rare indication.",
+      "source": "TPP · p.2",
+      "confidence": "High",
+      "policies": [
+        "JCA",
+        "EU-GPL"
+      ]
+    },
+    {
+      "group": "Endpoints & follow-up",
+      "text": "Primary endpoint mature at filing?",
+      "options": [
+        "Yes",
+        "No",
+        "Unknown"
+      ],
+      "ai": "No",
+      "evidence": "Suggested No: primary endpoint data may not be mature at filing.",
+      "source": "CDP · p.15",
+      "confidence": "Med",
+      "policies": [
+        "MFN",
+        "JCA"
+      ]
+    },
+    {
+      "group": "Market factors",
+      "text": "Does the asset fall in an MFN-covered therapeutic class?",
+      "ai": "Yes",
+      "evidence": "Therapeutic class matches a GLOBE / GUARD category.",
+      "source": "TPP · p.2",
+      "confidence": "Med",
+      "policies": [
+        "MFN",
+        "JCA"
+      ]
+    },
+    {
+      "group": "EU Market Access Readiness",
+      "text": "Are there any EU markets where you foresee an access challenge?",
+      "options": [
+        "Yes",
+        "No",
+        "Unknown"
+      ],
+      "ai": "Yes",
+      "evidence": "Suggested Yes: access hurdles are expected in some EU markets.",
+      "source": "Client guidance",
+      "confidence": "Med",
+      "policies": [
+        "EU-GPL"
+      ]
+    },
+    {
+      "group": "JCA Early Planning",
+      "text": "Have the key stakeholders for JCA delivery been identified and planned for?",
+      "options": [
+        "Yes",
+        "No",
+        "Unknown"
+      ],
+      "ai": "No",
+      "evidence": "Suggested No: JCA delivery stakeholders are not yet identified or planned.",
+      "source": "Client guidance",
+      "confidence": "Med",
+      "policies": [
+        "JCA"
+      ]
+    },
+    {
+      "group": "Regional Value Difference",
+      "text": "Is there a potentially high discrepancy in payer value recognition between US and ex-US (MFN reference basket countries)?",
+      "ai": "Yes",
+      "evidence": "Suggested Yes: US and ex-US payers may value the asset differently.",
+      "source": "Client guidance",
+      "confidence": "Med",
+      "policies": [
+        "MFN"
+      ]
+    }
+  ],
+  "defaultVariables": [
+    {
+      "name": "IRA price discount",
+      "policy": "IRA",
+      "low": "25%",
+      "base": "40%",
+      "high": "60%"
+    },
+    {
+      "name": "Medicare share of patients",
+      "policy": "IRA",
+      "low": "60%",
+      "base": "70%",
+      "high": "80%"
+    },
+    {
+      "name": "MFN US vs. reference-price gap",
+      "policy": "MFN",
+      "low": "20%",
+      "base": "35%",
+      "high": "50%"
+    },
+    {
+      "name": "EU launch delay from JCA",
+      "policy": "JCA",
+      "low": "0 mo",
+      "base": "6 mo",
+      "high": "12 mo"
+    },
+    {
+      "name": "EU-GPL protection gained",
+      "policy": "EU-GPL",
+      "low": "0 yrs",
+      "base": "+1 yr",
+      "high": "+2 yrs"
+    }
+  ],
+  "sampleImpact": {
+    "IRA": -353,
+    "MFN": -210,
+    "JCA": -95,
+    "EU-GPL": 60
+  },
+  "synergies": [
+    {
+      "kind": "Synergy",
+      "text": "Orphan-first avoids IRA selection, earns EU exclusivity.",
+      "policies": [
+        "IRA",
+        "EU-GPL"
+      ],
+      "rank": "D"
+    },
+    {
+      "kind": "Synergy",
+      "text": "One evidence package serves JCA, EU-GPL, MFN.",
+      "policies": [
+        "MFN",
+        "JCA",
+        "EU-GPL"
+      ],
+      "rank": "G"
+    },
+    {
+      "kind": "Tradeoff",
+      "text": "EU-GPL rewards filing within 90 days; MFN favors delaying ex-US launch.",
+      "policies": [
+        "MFN",
+        "EU-GPL"
+      ],
+      "rank": "I"
+    }
+  ],
+  "initialDecisionTrace": {
+    "assetId": "TKX-114",
+    "activePolicyVersions": {
+      "IRA": "PV-IRA-32",
+      "MFN": "PV-MFN-18",
+      "JCA": "PV-JCA-21",
+      "EU-GPL": "PV-GPL-12"
+    },
+    "activeRuleVersions": {
+      "R-IRA-01": "3.2",
+      "R-IRA-02": "2.4",
+      "R-MFN-01": "1.8",
+      "R-MFN-02": "1.5",
+      "R-JCA-01": "2.1",
+      "R-JCA-02": "2.1",
+      "R-GPL-01": "1.2"
+    },
+    "firedRules": [
+      "R-IRA-01",
+      "R-MFN-01",
+      "R-JCA-01",
+      "R-GPL-01"
+    ],
+    "skippedRules": [
+      "R-GPL-02"
+    ],
+    "failedRules": [],
+    "outputSummary": "IRA in scope · MFN exposure · JCA in scope · EU-GPL directional protection",
+    "explanationLog": [
+      "IRA: $205M Medicare spend crosses the illustrative IRA threshold.",
+      "MFN: Part D coverage and antineoplastic class trigger MFN exposure review.",
+      "JCA: EU oncology active substance is within the phased JCA scope.",
+      "EU-GPL: supply condition remains a human-review point."
+    ]
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "baselineDate": "15 Oct 2026",
+  "lastRefresh": "27 Oct 2026 · 06:00",
+  "pipelines": [
+    {
+      "policy": "IRA",
+      "name": "CMS / Federal Register pipeline",
+      "lastRun": "27 Oct 2026 · 06:00",
+      "status": "ok"
+    },
+    {
+      "policy": "MFN",
+      "name": "Federal Register GLOBE / GUARD pipeline",
+      "lastRun": "27 Oct 2026 · 06:00",
+      "status": "ok"
+    },
+    {
+      "policy": "JCA",
+      "name": "EUR-Lex / EC HTA pipeline",
+      "lastRun": "27 Oct 2026 · 06:00",
+      "status": "ok"
+    },
+    {
+      "policy": "EU-GPL",
+      "name": "EC / Council pipeline",
+      "lastRun": "27 Oct 2026 · 06:00",
+      "status": "failed",
+      "failReason": "Source unreachable · last good run 20 Oct 2026"
+    }
+  ],
+  "documents": [
+    {
+      "published": "17 Oct 2026",
+      "policy": "IRA",
+      "title": "Medicare Drug Price Negotiation Program: draft guidance for initial price applicability year 2029 (illustrative)",
+      "url": "https://www.cms.gov/inflation-reduction-act-and-medicare/medicare-drug-price-negotiation",
+      "summary": "CMS proposes how it will select drugs and run negotiations for 2029. It clarifies how the Medicare spend threshold is applied and asks for comments within 45 days."
+    },
+    {
+      "published": "24 Oct 2026",
+      "policy": "IRA",
+      "title": "Medicare Drug Price Negotiation Program: final guidance for initial price applicability year 2029 (illustrative)",
+      "url": "https://www.cms.gov/inflation-reduction-act-and-medicare/medicare-drug-price-negotiation",
+      "summary": "CMS finalises the 2029 negotiation process. It confirms the data used to judge bona fide generic and biosimilar marketing."
+    },
+    {
+      "published": "21 Oct 2026",
+      "policy": "IRA",
+      "title": "Federal Register notice: Medicare Drug Price Negotiation Program information collection (illustrative)",
+      "url": "https://www.federalregister.gov/documents/2025/11/28/2025-21501/medicare-program-inflation-reduction-act-ira-medicare-drug-price-negotiation-program-final-guidance",
+      "summary": "CMS updates the manufacturer data forms used during negotiation. Submission deadlines for selected drugs move by two weeks."
+    },
+    {
+      "published": "22 Oct 2026",
+      "policy": "MFN",
+      "title": "GLOBE Model final rule: correcting amendment (illustrative)",
+      "url": "https://www.federalregister.gov/documents/2026/10/02/2026-20281/global-benchmark-for-efficient-drug-pricing-globe-model",
+      "summary": "Corrects technical errors in the GLOBE Model final rule. It restates the reference-country list and the covered Part B therapeutic categories."
+    },
+    {
+      "published": "16 Oct 2026",
+      "policy": "MFN",
+      "title": "GUARD Model: updated model information (illustrative)",
+      "url": "https://www.federalregister.gov/documents/2025/12/23/2025-23705/guarding-us-medicare-against-rising-drug-costs-guard-model",
+      "summary": "CMS publishes updated GUARD Model details for Part D drugs. It describes the first performance year and how the spend threshold is calculated."
+    },
+    {
+      "published": "20 Oct 2026",
+      "policy": "JCA",
+      "title": "Implementing Regulation amending the joint clinical assessment procedure for medicinal products (illustrative)",
+      "url": "https://eur-lex.europa.eu/eli/reg_impl/2024/1381/oj/eng",
+      "summary": "Amends procedural rules for joint clinical assessments of medicinal products. It adjusts dossier timelines and how health technology developers are consulted."
+    },
+    {
+      "published": "23 Oct 2026",
+      "policy": "JCA",
+      "title": "Joint scientific consultations: updated guidance for health technology developers (illustrative)",
+      "url": "https://health.ec.europa.eu/health-technology-assessment/implementation-regulation-health-technology-assessment/joint-scientific-consultations_en",
+      "summary": "Updated guidance on requesting joint scientific consultations. It sets out the selection criteria and the next request periods."
+    },
+    {
+      "published": "18 Oct 2026",
+      "policy": "EU-GPL",
+      "title": "EU pharmaceutical legislation: Council compromise text, draft Regulation (illustrative)",
+      "url": "https://data.consilium.europa.eu/doc/document/ST-7105-2026-REV-2/en/pdf",
+      "summary": "New Council compromise text on the draft Regulation. It revises the application date and the transitional provisions for products authorised before it."
+    },
+    {
+      "published": "19 Oct 2026",
+      "policy": "EU-GPL",
+      "title": "EU pharmaceutical legislation: Council compromise text, draft Directive (illustrative)",
+      "url": "https://data.consilium.europa.eu/doc/document/ST-7106-2026-REV-2/en/pdf",
+      "summary": "New Council compromise text on the draft Directive. It changes the regulatory data protection periods and the conditions for extra market protection."
+    }
+  ]
+}

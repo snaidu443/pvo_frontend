@@ -1,0 +1,83 @@
+{
+  "questionOrder": [
+    "Is TEST-100 eligible for MFP negotiation, and why?",
+    "When can TEST-100 be selected for MFP, and what is the minimum discount?",
+    "Does orphan status protect TEST-100 from MFN exposure?",
+    "What is the risk and impact if TEST-100's US launch is delayed by a year?",
+    "How does JCA affect TEST-100’s EMA MAA submission timing?"
+  ],
+  "knowledgeBase": [
+    {
+      "question": "Is TEST-100 eligible for MFP negotiation, and why?",
+      "answer": "TEST-100 is subject to the IRA because it passes all four eligibility criteria:\n1. Medicare Population: Predominantly Medicare payer mix with Part B coverage\n2. Orphan Exclusion: Launch in 2L LR-MDS qualifies as a non-orphan indication. Therefore, this exclusion criteria will not apply.\n3. Medicare Spend: The asset is projected to exceed the Medicare spend threshold of $200M starting from 2035.\n4. Generic / Biosimilar: Biosimilar entry is expected in 2043, which is after the earliest negotiation eligibility year of 2036.",
+      "pattern": "eligib.*(\\bira\\b|negotiat|\\bmfp\\b)|(\\bira\\b|negotiat|\\bmfp\\b).*eligib",
+      "flags": ""
+    },
+    {
+      "question": "When can TEST-100 be selected for MFP, and what is the minimum discount?",
+      "answer": "TEST-100 can be selected for MFP negotiations as early as 2036 with a ~25% of non-FAMP minimum price discount.\n• Eligibility: Since TEST-100 is a small-molecule, its earliest MFP selection eligibility is 7 years after its first non-orphan indication launch in 2029. Therefore, TEST-100 may be eligible to be selected for MFP negotiations as early as 2036, with effective price change as early as 2038.\n• Minimum Discount: The minimum discount is driven by the time elapsed since the drug's initial FDA approval. Assuming TEST-100 is selected early with an MFP price change effective between 2038-2041, the applicable minimum price discount is 25% of non-FAMP (Federal Average Manufacturer Price).",
+      "pattern": "\\bselected\\b|minimum discount|when.*(select|price appl)",
+      "flags": ""
+    },
+    {
+      "question": "Does orphan status protect TEST-100 from MFN exposure?",
+      "answer": "Orphan status will exclude TEST-100 only if it does not launch in additional non-orphan indications. However, once TEST-100 launches in a non-orphan indication, it might be subject to MFN assuming other inclusion criteria are still met.",
+      "pattern": "orphan.*\\bmfn\\b|\\bmfn\\b.*orphan",
+      "flags": ""
+    },
+    {
+      "question": "What is the risk and impact if TEST-100's US launch is delayed by a year?",
+      "answer": "Delaying the US launch in 2L LR-MDS from 2029 to 2030 lowers net lifetime value by about $57M (about -3%), from $2.25B to $2.19B.\n• The driver of the decrease is due to TEST-100 having one fewer year of US-exclusive sales, which delays its MFN eligibility by one year. The differential revenue impact of this effect is around $50M.\n• The delay in US launch also results in a delay in the IRA clock. TEST-100's earliest negotiation eligibility now falls in 2037 instead of 2036, with earliest MFP effectiveness in 2039 instead of 2038.",
+      "pattern": "launch.*(slip|delay)|(slip|delay).*launch",
+      "flags": ""
+    },
+    {
+      "question": "How does JCA affect TEST-100’s EMA MAA submission timing?",
+      "answer": "The EU JCA introduces an additional & “mandatory” regional dossier, similar in scope and size to the EMA dossier, to be prepared in parallel and submitted 45 days prior to CHMP opinion. A third dossier is also necessary to be submitted for orphan drugs, which will be applicable for TEST-100's 1L myelofibrosis EU launch in 2032.",
+      "pattern": "\\bjca\\b.*(maa|submission|dossier|timing)|(maa|submission|dossier|timing).*\\bjca\\b",
+      "flags": ""
+    },
+    {
+      "question": "What is TEST-100's revenue at risk under IRA?",
+      "answer": "About -$187M over the 15-year window (2029-2043), or roughly 7% of the $2.71B gross value. MFN is the larger effect for TEST-100 at -$276M; JCA and EU-GPL revenue impact is not modelled.\nMain driver: from the year the negotiated price takes effect (2038), revenue falls by 15% a year due to MFP applicability. The IRA price discount (base case 40%, range 25% to 60%) and the Medicare share (70%) scale this effect in Scenario Analysis.\nIllustrative, not a forecast.\nSource: Impact & Recommendations, policy impact for TEST-100.",
+      "pattern": "test-100.*revenue at risk|revenue at risk.*(test-100|under ira)",
+      "flags": ""
+    },
+    {
+      "question": "What if TEST-100's Medicare share is 10 points above forecast?",
+      "answer": "Raising the Medicare share from 70% to 80% scales the IRA effect by about 14%. IRA revenue at risk would move from about -$187M to about -$214M (roughly -$27M more).\nEligibility does not change: TEST-100 already exceeds the $200M IRA and $100M Part B MFN spend thresholds.\nIllustrative. Source: Scenario Analysis, Medicare share of patients 70% to 80%.",
+      "pattern": "medicare share",
+      "flags": ""
+    },
+    {
+      "question": "Which Medicare Part B drugs are included in the GLOBE Model?",
+      "answer": "The GLOBE Model covers qualifying single-source drugs and sole-source biological products paid under Medicare Part B in specified therapeutic categories. A product must exceed $100 million in Original Medicare Part B spending over the specified 12-month measurement period.\nThe covered categories include antigout agents, antineoplastics, blood products and modifiers, central nervous system agents, immunological agents, metabolic bone disease agents, and ophthalmic agents. Drugs with an MFP in effect, orphan-only drugs, specified cell and gene therapies, and plasma-derived products are excluded.",
+      "pattern": "globe",
+      "flags": ""
+    },
+    {
+      "question": "Which Medicare Part D drugs would be covered by the proposed GUARD Model?",
+      "answer": "The proposed GUARD Model would apply to qualifying sole-source drugs and sole-source biological products covered under Medicare Part D in specified therapeutic categories. For the first proposed performance year, products with annual application-level Part D gross covered drug costs below $69 million would be excluded.\nGenerics, biosimilars, and drugs with an effective Maximum Fair Price would also be excluded. The $69 million threshold would be adjusted for inflation in subsequent years.",
+      "pattern": "guard",
+      "flags": ""
+    },
+    {
+      "question": "What clinical evidence is preferred for an EU Joint Clinical Assessment?",
+      "answer": "Direct comparative evidence from adequately designed randomized controlled trials is preferred where possible. If a relevant treatment has not been directly compared in a randomized trial, an appropriate indirect comparison should be provided; anchored indirect comparisons using a common comparator are preferred over unanchored methods.\nThe evidence should address the assessment’s PICO requirements, including relevant populations, comparators and health outcomes. Requested subgroup analyses should also be reported, and final patient-centred outcomes—such as mortality, morbidity and health-related quality of life—are preferred where feasible.",
+      "pattern": "(jca|joint clinical).*(evidence|comparat|pico)|(evidence|pico|comparat).*(jca|joint clinical)",
+      "flags": ""
+    },
+    {
+      "question": "How do IRA negotiation timelines differ between small-molecule drugs and biologics?",
+      "answer": "A small-molecule drug must generally have been FDA-approved for at least 7 years before it can be selected for negotiation, while a biologic must generally have been licensed for at least 11 years. The negotiated Maximum Fair Price cannot apply earlier than 9 years after approval for a small-molecule drug or 13 years after licensure for a biologic.",
+      "pattern": "small.?molecule|biologic|7.year|11.year|timeline|maximum fair price|\\bmfp\\b",
+      "flags": ""
+    },
+    {
+      "question": "What types of drugs may be excluded from Medicare drug price negotiation under the IRA?",
+      "answer": "The IRA excludes low-spend drugs with annual Medicare spending below the applicable inflation-adjusted threshold, plasma-derived products, qualifying orphan drugs approved only for one rare disease or condition, and certain products from qualifying small biotech manufacturers. A product must also be a qualifying single-source drug without marketed generic or biosimilar competition to be eligible for selection.",
+      "pattern": "exclu|exempt|exception",
+      "flags": ""
+    }
+  ]
+}

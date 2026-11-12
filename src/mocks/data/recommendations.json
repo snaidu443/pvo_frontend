@@ -1,0 +1,78 @@
+[
+  {
+    "rank": "A",
+    "title": "Reconsider modality / asset selection",
+    "priority": "Strategic",
+    "rationale": "Starts the IRA clock; a biologic extends the runway.",
+    "policies": [
+      "IRA"
+    ],
+    "owner": "Takeda",
+    "timing": "Before Phase 3 start",
+    "value": 120,
+    "driver": "IRA price discount",
+    "detail": "Evaluate the value case for follow-on assets and formulation strategy against the 11-year biologic negotiation timeline."
+  },
+  {
+    "rank": "D",
+    "title": "Optimize indication sequencing",
+    "priority": "High",
+    "rationale": "Orphan-first sequencing delays IRA selection and earns EU protection.",
+    "policies": [
+      "IRA",
+      "EU-GPL"
+    ],
+    "owner": "Takeda",
+    "timing": "Before Phase 3 start",
+    "value": 55,
+    "driver": "Medicare share of patients",
+    "detail": "Compare launch and filing order by indication, with orphan designation status confirmed in the US and EU."
+  },
+  {
+    "rank": "G",
+    "title": "Optimize pre-launch evidence",
+    "priority": "High",
+    "rationale": "Comparative SoC data strengthens JCA and MFN positioning.",
+    "policies": [
+      "MFN",
+      "JCA",
+      "EU-GPL"
+    ],
+    "owner": "Trinity",
+    "timing": "18 months pre-launch",
+    "value": 35,
+    "driver": "MFN reference-price gap",
+    "detail": "Prioritize comparative evidence that can support assessment needs across the EU and inform US pricing exposure."
+  },
+  {
+    "rank": "B",
+    "title": "Build post-launch evidence",
+    "priority": "Medium",
+    "rationale": "Real-world evidence supports IRA, MFN and JCA.",
+    "policies": [
+      "IRA",
+      "MFN",
+      "JCA"
+    ],
+    "owner": "Trinity",
+    "timing": "At launch",
+    "value": 18,
+    "driver": "IRA price discount",
+    "detail": "Establish a post-launch evidence plan with clear ownership, endpoints, and governance checkpoints."
+  },
+  {
+    "rank": "I",
+    "title": "Align EMA, JCA and HTA planning",
+    "priority": "Medium",
+    "rationale": "Aligned timelines avoid up to 12 months of EU delay.",
+    "policies": [
+      "JCA",
+      "EU-GPL"
+    ],
+    "owner": "Takeda",
+    "timing": "Before EMA pre-submission",
+    "value": 12,
+    "driver": "EU launch delay from JCA",
+    "detail": "Coordinate submission milestones and early national HTA engagement to reduce avoidable sequencing delays."
+  }
+]

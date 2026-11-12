@@ -1,0 +1,124 @@
+[
+  {
+    "id": 1,
+    "name": "Maya Chen",
+    "email": "maya.chen@takeda.example",
+    "role": "Admin",
+    "active": true,
+    "last": "Just now",
+    "asset": "All assets",
+    "roleCode": "super_admin",
+    "status": "active",
+    "assignedAssets": [
+      "All assets"
+    ],
+    "assetIds": [
+      "TAK-481",
+      "TAK-227",
+      "TAK-909",
+      "TAK-315",
+      "TAK-602",
+      "TAK-711",
+      "TEST-100"
+    ],
+    "permissions": []
+  },
+  {
+    "id": 2,
+    "name": "Thomas Weber",
+    "email": "thomas.weber@takeda.example",
+    "role": "Editor",
+    "active": true,
+    "last": "Today, 09:42",
+    "asset": "Oncology portfolio",
+    "roleCode": "editor",
+    "status": "active",
+    "assignedAssets": [
+      "Oncology portfolio"
+    ],
+    "assetIds": [
+      "TAK-481",
+      "TAK-227",
+      "TAK-909",
+      "TAK-315",
+      "TEST-100"
+    ],
+    "permissions": []
+  },
+  {
+    "id": 3,
+    "name": "Aisha Rahman",
+    "email": "aisha.rahman@takeda.example",
+    "role": "Viewer",
+    "active": true,
+    "last": "Yesterday",
+    "asset": "Asset X (TKX-114)",
+    "roleCode": "viewer",
+    "status": "active",
+    "assignedAssets": [
+      "Asset X (TKX-114)"
+    ],
+    "assetIds": [
+      "TAK-481",
+      "TAK-227",
+      "TAK-711",
+      "TEST-100"
+    ],
+    "permissions": []
+  },
+  {
+    "id": 4,
+    "name": "Daniel Brooks",
+    "email": "daniel.brooks@takeda.example",
+    "role": "Viewer",
+    "active": true,
+    "last": "08 Oct 2026",
+    "asset": "Asset X (TKX-114)",
+    "roleCode": "viewer",
+    "status": "active",
+    "assignedAssets": [
+      "Asset X (TKX-114)"
+    ],
+    "assetIds": [
+      "TAK-315"
+    ],
+    "permissions": []
+  },
+  {
+    "id": 5,
+    "name": "Elena Rossi",
+    "email": "elena.rossi@takeda.example",
+    "role": "Editor",
+    "active": false,
+    "last": "21 Sep 2026",
+    "asset": "EU access team",
+    "roleCode": "editor",
+    "status": "inactive",
+    "assignedAssets": [
+      "EU access team"
+    ],
+    "assetIds": [
+      "TAK-909",
+      "TAK-602"
+    ],
+    "permissions": []
+  },
+  {
+    "id": 6,
+    "name": "Noah Patel",
+    "email": "noah.patel@takeda.example",
+    "role": "Viewer",
+    "active": false,
+    "status": "pending",
+    "last": "07 Oct 2026",
+    "asset": "Asset X (TKX-114)",
+    "roleCode": "viewer",
+    "assignedAssets": [
+      "Asset X (TKX-114)"
+    ],
+    "assetIds": [
+      "TAK-711"
+    ],
+    "permissions": []
+  }
+]

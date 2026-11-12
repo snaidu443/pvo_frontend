@@ -1,0 +1,144 @@
+[
+  {
+    "id": "PV-IRA-32",
+    "policySourceId": "SRC-IRA-CMS",
+    "versionLabel": "IRA CMS v3.2",
+    "detectedAt": "01 Sep 2026",
+    "effectiveDate": "01 Sep 2026",
+    "checksum": "a91c…42ef",
+    "status": "published",
+    "summary": "Current IRA selection logic, including the Medicare spend and orphan-drug criteria.",
+    "materiality": "medium",
+    "changedSections": [
+      "Selection threshold",
+      "Orphan exception"
+    ],
+    "impactedRuleIds": [
+      "R-IRA-01",
+      "R-IRA-02"
+    ],
+    "submittedBy": "Maya Chen",
+    "approvedBy": "Maya Chen"
+  },
+  {
+    "id": "PV-IRA-33",
+    "policySourceId": "SRC-IRA-CMS",
+    "versionLabel": "IRA CMS v3.3 candidate",
+    "detectedAt": "11 Oct 2026",
+    "effectiveDate": "01 Jan 2027",
+    "checksum": "bd71…a1c2",
+    "status": "submitted",
+    "summary": "Draft source update revises the spend threshold interpretation and requires policy-owner review.",
+    "materiality": "high",
+    "changedSections": [
+      "Annual spend threshold",
+      "Selection timing"
+    ],
+    "impactedRuleIds": [
+      "R-IRA-01",
+      "R-IRA-02"
+    ],
+    "submittedBy": "Thomas Weber",
+    "approvedBy": ""
+  },
+  {
+    "id": "PV-MFN-18",
+    "policySourceId": "SRC-MFN-CMS",
+    "versionLabel": "MFN CMS v1.8",
+    "detectedAt": "02 Oct 2026",
+    "effectiveDate": "02 Oct 2026",
+    "checksum": "37af…e190",
+    "status": "published",
+    "summary": "Current GLOBE and GUARD model scope and reference-country guidance.",
+    "materiality": "low",
+    "changedSections": [
+      "Reference basket note"
+    ],
+    "impactedRuleIds": [
+      "R-MFN-01",
+      "R-MFN-02"
+    ],
+    "submittedBy": "Elena Rossi",
+    "approvedBy": "Maya Chen"
+  },
+  {
+    "id": "PV-JCA-21",
+    "policySourceId": "SRC-JCA-EC",
+    "versionLabel": "JCA EC v2.1",
+    "detectedAt": "05 Aug 2026",
+    "effectiveDate": "05 Aug 2026",
+    "checksum": "78bc…0e4d",
+    "status": "published",
+    "summary": "Current EU-wide clinical assessment scope and submission timing.",
+    "materiality": "medium",
+    "changedSections": [
+      "Product scope",
+      "PICO guidance"
+    ],
+    "impactedRuleIds": [
+      "R-JCA-01",
+      "R-JCA-02"
+    ],
+    "submittedBy": "Aisha Rahman",
+    "approvedBy": "Maya Chen"
+  },
+  {
+    "id": "PV-JCA-22",
+    "policySourceId": "SRC-JCA-EC",
+    "versionLabel": "JCA EC v2.2 candidate",
+    "detectedAt": "12 Oct 2026",
+    "effectiveDate": "01 Nov 2026",
+    "checksum": "ee17…8b0a",
+    "status": "draft",
+    "summary": "Editorial FAQ clarification on the evidence template; no eligibility threshold change detected.",
+    "materiality": "low",
+    "changedSections": [
+      "FAQ · evidence template"
+    ],
+    "impactedRuleIds": [
+      "R-JCA-02"
+    ],
+    "submittedBy": "Aisha Rahman",
+    "approvedBy": ""
+  },
+  {
+    "id": "PV-GPL-12",
+    "policySourceId": "SRC-GPL-EC",
+    "versionLabel": "EU-GPL EC v1.2",
+    "detectedAt": "29 Sep 2026",
+    "effectiveDate": "01 Oct 2026",
+    "checksum": "4b03…a8d1",
+    "status": "published",
+    "summary": "Current draft framework for market protection and supply conditions.",
+    "materiality": "medium",
+    "changedSections": [
+      "Protection duration",
+      "Supply conditions"
+    ],
+    "impactedRuleIds": [
+      "R-GPL-01",
+      "R-GPL-02"
+    ],
+    "submittedBy": "Elena Rossi",
+    "approvedBy": "Maya Chen"
+  },
+  {
+    "id": "PV-GPL-13",
+    "policySourceId": "SRC-GPL-EC",
+    "versionLabel": "EU-GPL EC v1.3 candidate",
+    "detectedAt": "13 Oct 2026",
+    "effectiveDate": "Pending",
+    "checksum": "8cd4…017f",
+    "status": "draft",
+    "summary": "Candidate text clarifies the supply condition but does not alter the current live policy bundle.",
+    "materiality": "medium",
+    "changedSections": [
+      "Member State supply clause"
+    ],
+    "impactedRuleIds": [
+      "R-GPL-02"
+    ],
+    "submittedBy": "Thomas Weber",
+    "approvedBy": ""
+  }
+]

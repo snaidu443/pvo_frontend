@@ -1,0 +1,79 @@
+[
+  {
+    "id": "DELTA-IRA-33",
+    "policy": "IRA",
+    "sourceId": "SRC-IRA-CMS",
+    "previousVersionId": "PV-IRA-32",
+    "versionId": "PV-IRA-33",
+    "detectedAt": "11 Oct 2026 · 10:05",
+    "materiality": "high",
+    "status": "detected",
+    "summary": "Threshold-relevant clarification to Medicare spend assessment and selection timing.",
+    "changedClauses": [
+      "Section 2.1 · Annual spend measurement",
+      "Section 4.2 · Selection timing"
+    ],
+    "recommendedAction": "Policy-owner review required; hold candidate rules until approved.",
+    "impactedRuleIds": [
+      "R-IRA-01",
+      "R-IRA-02"
+    ],
+    "impactedAssetIds": [
+      "TAK-481",
+      "TAK-227",
+      "TAK-602",
+      "TEST-100"
+    ]
+  },
+  {
+    "id": "DELTA-JCA-22",
+    "policy": "JCA",
+    "sourceId": "SRC-JCA-EC",
+    "previousVersionId": "PV-JCA-21",
+    "versionId": "PV-JCA-22",
+    "detectedAt": "12 Oct 2026 · 11:35",
+    "materiality": "low",
+    "status": "review_needed",
+    "summary": "FAQ clarifies the evidence-template wording; no scope threshold change detected.",
+    "changedClauses": [
+      "FAQ · Evidence template wording"
+    ],
+    "recommendedAction": "Record as non-material after EU Access confirms no logic change.",
+    "impactedRuleIds": [
+      "R-JCA-02"
+    ],
+    "impactedAssetIds": [
+      "TAK-481",
+      "TAK-227",
+      "TAK-909",
+      "TAK-315",
+      "TAK-711",
+      "TEST-100"
+    ]
+  },
+  {
+    "id": "DELTA-GPL-13",
+    "policy": "EU-GPL",
+    "sourceId": "SRC-GPL-EC",
+    "previousVersionId": "PV-GPL-12",
+    "versionId": "PV-GPL-13",
+    "detectedAt": "13 Oct 2026 · 16:40",
+    "materiality": "medium",
+    "status": "approval_pending",
+    "summary": "Supply clause clarification is mapped to the candidate Member State supply gate.",
+    "changedClauses": [
+      "Article 18 · Member State supply condition"
+    ],
+    "recommendedAction": "Review candidate rule GPL-SUPPLY-02 before the policy version is published.",
+    "impactedRuleIds": [
+      "R-GPL-02"
+    ],
+    "impactedAssetIds": [
+      "TAK-481",
+      "TAK-227",
+      "TAK-315",
+      "TAK-711",
+      "TEST-100"
+    ]
+  }
+]

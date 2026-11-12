@@ -1,0 +1,421 @@
+[
+  {
+    "id": "TAK-481",
+    "assetCode": "TAK-481",
+    "assetName": "TAK-481 Breast Cancer",
+    "legacyAlias": "Asset X (TKX-114)",
+    "therapeuticArea": "Oncology",
+    "stage": "Phase 3",
+    "jurisdictions": [
+      "US",
+      "EU"
+    ],
+    "policyExposures": [
+      "IRA",
+      "MFN",
+      "JCA",
+      "EU-GPL"
+    ],
+    "submissionStatus": "Needs review",
+    "submissionCompleteness": 78,
+    "eligibilityStatus": "4 policies assessed",
+    "businessContextStatus": "Complete",
+    "impactStatus": "High exposure",
+    "owner": "Aisha Rahman",
+    "lastUpdatedAt": "14 Oct 2026",
+    "estimatedImpactLevel": "High",
+    "estimatedAtRisk": 598,
+    "estimatedOpportunity": 240,
+    "recommendationStatus": "5 actions · +$240M",
+    "governanceAlerts": 3,
+    "summaryMetrics": {
+      "gross": 2580,
+      "net": 1980,
+      "usRevenue": 420,
+      "euRevenue": 180
+    },
+    "eligibility": {
+      "IRA": "In scope",
+      "MFN": "In scope",
+      "JCA": "In scope",
+      "EU-GPL": "In scope"
+    },
+    "context": {
+      "modality": "Small molecule",
+      "coverage": "Oral · Part D",
+      "medicareSpend": 205,
+      "launchUS": 2027,
+      "launchEU": 2028,
+      "priority": "Maximize value",
+      "sequence": "US-first",
+      "appetite": "Medium",
+      "marketArchetype": "Specialty oncology",
+      "patientShare": "70%"
+    },
+    "policyImpact": {
+      "IRA": -353,
+      "MFN": -210,
+      "JCA": -95,
+      "EU-GPL": 60
+    },
+    "recommendationCount": 5,
+    "approvalCount": 2
+  },
+  {
+    "id": "TAK-227",
+    "assetCode": "TAK-227",
+    "assetName": "TAK-227 Rare Hematology",
+    "therapeuticArea": "Rare hematology",
+    "stage": "Phase 2",
+    "jurisdictions": [
+      "US",
+      "EU"
+    ],
+    "policyExposures": [
+      "IRA",
+      "JCA",
+      "EU-GPL"
+    ],
+    "submissionStatus": "Incomplete",
+    "submissionCompleteness": 62,
+    "eligibilityStatus": "2 in scope · 1 pending",
+    "businessContextStatus": "Needs inputs",
+    "impactStatus": "High exposure",
+    "owner": "Thomas Weber",
+    "lastUpdatedAt": "12 Oct 2026",
+    "estimatedImpactLevel": "High",
+    "estimatedAtRisk": 420,
+    "estimatedOpportunity": 155,
+    "recommendationStatus": "3 actions · +$155M",
+    "governanceAlerts": 2,
+    "summaryMetrics": {
+      "gross": 1640,
+      "net": 1220,
+      "usRevenue": 260,
+      "euRevenue": 140
+    },
+    "eligibility": {
+      "IRA": "In scope",
+      "MFN": "Not in scope",
+      "JCA": "In scope",
+      "EU-GPL": "Pending"
+    },
+    "context": {
+      "modality": "Biologic",
+      "coverage": "Infusion · Part B",
+      "medicareSpend": 138,
+      "launchUS": 2029,
+      "launchEU": 2030,
+      "priority": "Maximize value",
+      "sequence": "US-first",
+      "appetite": "High",
+      "marketArchetype": "Orphan specialty",
+      "patientShare": "58%"
+    },
+    "policyImpact": {
+      "IRA": -245,
+      "MFN": 0,
+      "JCA": -110,
+      "EU-GPL": 35
+    },
+    "recommendationCount": 3,
+    "approvalCount": 1
+  },
+  {
+    "id": "TAK-909",
+    "assetCode": "TAK-909",
+    "assetName": "TAK-909 Immunology",
+    "therapeuticArea": "Immunology",
+    "stage": "Phase 3",
+    "jurisdictions": [
+      "US",
+      "EU"
+    ],
+    "policyExposures": [
+      "MFN",
+      "JCA"
+    ],
+    "submissionStatus": "Complete",
+    "submissionCompleteness": 92,
+    "eligibilityStatus": "2 policies assessed",
+    "businessContextStatus": "Complete",
+    "impactStatus": "Medium exposure",
+    "owner": "Elena Rossi",
+    "lastUpdatedAt": "11 Oct 2026",
+    "estimatedImpactLevel": "Medium",
+    "estimatedAtRisk": 255,
+    "estimatedOpportunity": 90,
+    "recommendationStatus": "2 actions · +$90M",
+    "governanceAlerts": 0,
+    "summaryMetrics": {
+      "gross": 3120,
+      "net": 2865,
+      "usRevenue": 690,
+      "euRevenue": 430
+    },
+    "eligibility": {
+      "IRA": "Not in scope",
+      "MFN": "In scope",
+      "JCA": "In scope",
+      "EU-GPL": "Not in scope"
+    },
+    "context": {
+      "modality": "Biologic",
+      "coverage": "Infusion · Part B",
+      "medicareSpend": 88,
+      "launchUS": 2028,
+      "launchEU": 2029,
+      "priority": "Speed to market",
+      "sequence": "Simultaneous",
+      "appetite": "Medium",
+      "marketArchetype": "Specialty immunology",
+      "patientShare": "31%"
+    },
+    "policyImpact": {
+      "IRA": 0,
+      "MFN": -165,
+      "JCA": -90,
+      "EU-GPL": 0
+    },
+    "recommendationCount": 2,
+    "approvalCount": 0
+  },
+  {
+    "id": "TAK-315",
+    "assetCode": "TAK-315",
+    "assetName": "TAK-315 Cell Therapy",
+    "therapeuticArea": "Cell therapy",
+    "stage": "Phase 1",
+    "jurisdictions": [
+      "US",
+      "EU"
+    ],
+    "policyExposures": [
+      "JCA",
+      "EU-GPL"
+    ],
+    "submissionStatus": "Incomplete",
+    "submissionCompleteness": 45,
+    "eligibilityStatus": "Scope review pending",
+    "businessContextStatus": "Draft",
+    "impactStatus": "High uncertainty",
+    "owner": "Daniel Brooks",
+    "lastUpdatedAt": "09 Oct 2026",
+    "estimatedImpactLevel": "High",
+    "estimatedAtRisk": 310,
+    "estimatedOpportunity": 120,
+    "recommendationStatus": "2 actions · +$120M",
+    "governanceAlerts": 4,
+    "summaryMetrics": {
+      "gross": 980,
+      "net": 670,
+      "usRevenue": 180,
+      "euRevenue": 90
+    },
+    "eligibility": {
+      "IRA": "Not in scope",
+      "MFN": "Not in scope",
+      "JCA": "Scope pending",
+      "EU-GPL": "Review"
+    },
+    "context": {
+      "modality": "Cell therapy",
+      "coverage": "Infusion · Part B",
+      "medicareSpend": 42,
+      "launchUS": 2031,
+      "launchEU": 2032,
+      "priority": "Speed to market",
+      "sequence": "US-first",
+      "appetite": "High",
+      "marketArchetype": "Advanced therapy",
+      "patientShare": "24%"
+    },
+    "policyImpact": {
+      "IRA": 0,
+      "MFN": 0,
+      "JCA": -230,
+      "EU-GPL": -80
+    },
+    "recommendationCount": 2,
+    "approvalCount": 2
+  },
+  {
+    "id": "TAK-602",
+    "assetCode": "TAK-602",
+    "assetName": "TAK-602 CNS",
+    "therapeuticArea": "Neuroscience",
+    "stage": "Phase 2",
+    "jurisdictions": [
+      "US"
+    ],
+    "policyExposures": [
+      "IRA",
+      "MFN"
+    ],
+    "submissionStatus": "In progress",
+    "submissionCompleteness": 73,
+    "eligibilityStatus": "IRA at risk · MFN in scope",
+    "businessContextStatus": "In progress",
+    "impactStatus": "Medium exposure",
+    "owner": "Maya Chen",
+    "lastUpdatedAt": "13 Oct 2026",
+    "estimatedImpactLevel": "Medium",
+    "estimatedAtRisk": 185,
+    "estimatedOpportunity": 65,
+    "recommendationStatus": "2 actions · +$65M",
+    "governanceAlerts": 1,
+    "summaryMetrics": {
+      "gross": 1460,
+      "net": 1275,
+      "usRevenue": 320,
+      "euRevenue": 0
+    },
+    "eligibility": {
+      "IRA": "At risk",
+      "MFN": "In scope",
+      "JCA": "Not in scope",
+      "EU-GPL": "Not in scope"
+    },
+    "context": {
+      "modality": "Small molecule",
+      "coverage": "Oral · Part D",
+      "medicareSpend": 176,
+      "launchUS": 2030,
+      "launchEU": null,
+      "priority": "Speed to market",
+      "sequence": "US-first",
+      "appetite": "Low",
+      "marketArchetype": "Primary-care CNS",
+      "patientShare": "46%"
+    },
+    "policyImpact": {
+      "IRA": -110,
+      "MFN": -75,
+      "JCA": 0,
+      "EU-GPL": 0
+    },
+    "recommendationCount": 2,
+    "approvalCount": 1
+  },
+  {
+    "id": "TAK-711",
+    "assetCode": "TAK-711",
+    "assetName": "TAK-711 Orphan Metabolic",
+    "therapeuticArea": "Metabolic disease",
+    "stage": "Phase 3",
+    "jurisdictions": [
+      "US",
+      "EU"
+    ],
+    "policyExposures": [
+      "IRA",
+      "JCA",
+      "EU-GPL"
+    ],
+    "submissionStatus": "Complete",
+    "submissionCompleteness": 96,
+    "eligibilityStatus": "3 policies assessed",
+    "businessContextStatus": "Complete",
+    "impactStatus": "Low exposure",
+    "owner": "Aisha Rahman",
+    "lastUpdatedAt": "10 Oct 2026",
+    "estimatedImpactLevel": "Low",
+    "estimatedAtRisk": 72,
+    "estimatedOpportunity": 48,
+    "recommendationStatus": "1 action · +$48M",
+    "governanceAlerts": 0,
+    "summaryMetrics": {
+      "gross": 760,
+      "net": 688,
+      "usRevenue": 150,
+      "euRevenue": 120
+    },
+    "eligibility": {
+      "IRA": "Orphan exception",
+      "MFN": "Not in scope",
+      "JCA": "In scope",
+      "EU-GPL": "In scope"
+    },
+    "context": {
+      "modality": "Biologic",
+      "coverage": "Infusion · Part B",
+      "medicareSpend": 54,
+      "launchUS": 2028,
+      "launchEU": 2029,
+      "priority": "Maximize value",
+      "sequence": "EU-first",
+      "appetite": "Medium",
+      "marketArchetype": "Orphan metabolic",
+      "patientShare": "18%"
+    },
+    "policyImpact": {
+      "IRA": 0,
+      "MFN": 0,
+      "JCA": -52,
+      "EU-GPL": -20
+    },
+    "recommendationCount": 1,
+    "approvalCount": 0
+  },
+  {
+    "id": "TEST-100",
+    "assetCode": "TEST-100",
+    "assetName": "TEST-100 Test Asset",
+    "therapeuticArea": "Hematology",
+    "stage": "Phase 3",
+    "jurisdictions": [
+      "US",
+      "EU"
+    ],
+    "policyExposures": [
+      "IRA",
+      "MFN",
+      "JCA",
+      "EU-GPL"
+    ],
+    "submissionStatus": "In progress",
+    "submissionCompleteness": 55,
+    "eligibilityStatus": "4 policies assessed",
+    "businessContextStatus": "Draft",
+    "impactStatus": "High exposure",
+    "owner": "Thomas Weber",
+    "lastUpdatedAt": "21 Oct 2026",
+    "estimatedImpactLevel": "High",
+    "estimatedAtRisk": 601,
+    "estimatedOpportunity": 474,
+    "recommendationStatus": "5 actions · +$474M",
+    "governanceAlerts": 5,
+    "summaryMetrics": {
+      "gross": 3748,
+      "net": 3236,
+      "usRevenue": 422,
+      "euRevenue": 127
+    },
+    "eligibility": {
+      "IRA": "In scope",
+      "MFN": "In scope",
+      "JCA": "In scope",
+      "EU-GPL": "In scope"
+    },
+    "context": {
+      "modality": "Small molecule",
+      "coverage": "SC · Part B",
+      "medicareSpend": 295,
+      "launchUS": 2031,
+      "launchEU": 2032,
+      "priority": "Maximize value",
+      "sequence": "US-first",
+      "appetite": "Medium",
+      "marketArchetype": "Hematology",
+      "patientShare": "55%"
+    },
+    "policyImpact": {
+      "IRA": -276,
+      "MFN": -187,
+      "JCA": -138,
+      "EU-GPL": 89
+    },
+    "recommendationCount": 5,
+    "approvalCount": 0
+  }
+]

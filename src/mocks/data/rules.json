@@ -1,0 +1,431 @@
+[
+  {
+    "id": "R-IRA-01",
+    "code": "IRA-ELIG-01",
+    "name": "IRA negotiation eligibility",
+    "policy": "IRA",
+    "category": "eligibility",
+    "description": "Determines whether an asset meets the current IRA selection gates.",
+    "plainEnglishLogic": "An asset is in scope when its Medicare spend exceeds the threshold, it has an eligible non-orphan indication, and no generic entry precedes selection.",
+    "formalLogic": "spend > 200M AND non_orphan_indication AND generic_entry_year > selection_year",
+    "inputFields": [
+      "annual_medicare_spend",
+      "orphan_status",
+      "generic_entry_year",
+      "modality"
+    ],
+    "outputFields": [
+      "ira_eligibility",
+      "selection_year"
+    ],
+    "status": "active",
+    "version": "3.2",
+    "effectiveFrom": "01 Sep 2026",
+    "effectiveTo": "",
+    "owner": "US Policy",
+    "linkedPolicyVersionIds": [
+      "PV-IRA-32"
+    ],
+    "linkedApprovalId": "APR-2601",
+    "lastUpdatedBy": "Maya Chen",
+    "lastUpdatedAt": "01 Sep 2026",
+    "testCases": [
+      {
+        "name": "Asset X base case",
+        "input": "$205M · non-orphan · generic 2034",
+        "expected": "In scope",
+        "actual": "In scope",
+        "pass": true
+      },
+      {
+        "name": "Below spend threshold",
+        "input": "$190M · non-orphan · generic 2034",
+        "expected": "Out of scope",
+        "actual": "Out of scope",
+        "pass": true
+      },
+      {
+        "name": "Orphan-only indication",
+        "input": "$205M · orphan · generic 2034",
+        "expected": "Out of scope",
+        "actual": "Out of scope",
+        "pass": true
+      }
+    ],
+    "impactedAssetIds": [
+      "TAK-481",
+      "TAK-227",
+      "TAK-602",
+      "TAK-711",
+      "TEST-100"
+    ]
+  },
+  {
+    "id": "R-IRA-02",
+    "code": "IRA-IMPACT-02",
+    "name": "IRA price erosion estimate",
+    "policy": "IRA",
+    "category": "impact",
+    "description": "Estimates directional price erosion after the IRA negotiation event.",
+    "plainEnglishLogic": "Apply the scenario discount to Medicare-exposed revenue after the selection and price-effective years.",
+    "formalLogic": "risk = medicare_revenue_after_price_effective * scenario_price_discount",
+    "inputFields": [
+      "negotiation_year",
+      "price_effective_year",
+      "medicare_share",
+      "ira_discount"
+    ],
+    "outputFields": [
+      "ira_revenue_at_risk"
+    ],
+    "status": "active",
+    "version": "2.4",
+    "effectiveFrom": "01 Sep 2026",
+    "effectiveTo": "",
+    "owner": "Value & Access",
+    "linkedPolicyVersionIds": [
+      "PV-IRA-32"
+    ],
+    "linkedApprovalId": "APR-2601",
+    "lastUpdatedBy": "Maya Chen",
+    "lastUpdatedAt": "01 Sep 2026",
+    "testCases": [
+      {
+        "name": "Base discount",
+        "input": "40% discount · 70% Medicare share",
+        "expected": "Directional loss calculated",
+        "actual": "Directional loss calculated",
+        "pass": true
+      },
+      {
+        "name": "Zero exposure",
+        "input": "0% Medicare share",
+        "expected": "$0 impact",
+        "actual": "$0 impact",
+        "pass": true
+      }
+    ],
+    "impactedAssetIds": [
+      "TAK-481",
+      "TAK-227",
+      "TAK-602",
+      "TAK-711",
+      "TEST-100"
+    ]
+  },
+  {
+    "id": "R-MFN-01",
+    "code": "MFN-ELIG-01",
+    "name": "MFN model exposure gate",
+    "policy": "MFN",
+    "category": "eligibility",
+    "description": "Checks Medicare spend and model coverage for GLOBE or GUARD exposure.",
+    "plainEnglishLogic": "Evaluate the relevant Part B or Part D spend threshold and covered therapeutic class.",
+    "formalLogic": "(part_b AND spend > 100M OR part_d AND spend > 69M) AND class_in_scope",
+    "inputFields": [
+      "medicare_coverage",
+      "annual_medicare_spend",
+      "therapeutic_class"
+    ],
+    "outputFields": [
+      "mfn_exposure"
+    ],
+    "status": "active",
+    "version": "1.8",
+    "effectiveFrom": "02 Oct 2026",
+    "effectiveTo": "",
+    "owner": "US Policy",
+    "linkedPolicyVersionIds": [
+      "PV-MFN-18"
+    ],
+    "linkedApprovalId": "",
+    "lastUpdatedBy": "Elena Rossi",
+    "lastUpdatedAt": "02 Oct 2026",
+    "testCases": [
+      {
+        "name": "Part D Asset X",
+        "input": "Part D · $205M · antineoplastic",
+        "expected": "Exposed",
+        "actual": "Exposed",
+        "pass": true
+      },
+      {
+        "name": "Below Part D gate",
+        "input": "Part D · $60M",
+        "expected": "Not exposed",
+        "actual": "Not exposed",
+        "pass": true
+      }
+    ],
+    "impactedAssetIds": [
+      "TAK-481",
+      "TAK-909",
+      "TAK-602",
+      "TEST-100"
+    ]
+  },
+  {
+    "id": "R-MFN-02",
+    "code": "MFN-IMPACT-02",
+    "name": "Reference-price gap sensitivity",
+    "policy": "MFN",
+    "category": "impact",
+    "description": "Calculates the directional sensitivity to a US versus reference-price gap.",
+    "plainEnglishLogic": "Apply the selected reference-price gap and launch sequence to in-scope US revenue.",
+    "formalLogic": "mfn_risk = us_net_revenue * reference_price_gap * exposure_factor",
+    "inputFields": [
+      "us_net_revenue",
+      "reference_price_gap",
+      "launch_sequence"
+    ],
+    "outputFields": [
+      "mfn_revenue_at_risk"
+    ],
+    "status": "active",
+    "version": "1.5",
+    "effectiveFrom": "02 Oct 2026",
+    "effectiveTo": "",
+    "owner": "Value & Access",
+    "linkedPolicyVersionIds": [
+      "PV-MFN-18"
+    ],
+    "linkedApprovalId": "",
+    "lastUpdatedBy": "Elena Rossi",
+    "lastUpdatedAt": "02 Oct 2026",
+    "testCases": [
+      {
+        "name": "Base reference gap",
+        "input": "35% gap · US-first",
+        "expected": "Directional impact calculated",
+        "actual": "Directional impact calculated",
+        "pass": true
+      },
+      {
+        "name": "No reference gap",
+        "input": "0% gap",
+        "expected": "$0 impact",
+        "actual": "$0 impact",
+        "pass": true
+      }
+    ],
+    "impactedAssetIds": [
+      "TAK-481",
+      "TAK-909",
+      "TAK-602",
+      "TEST-100"
+    ]
+  },
+  {
+    "id": "R-JCA-01",
+    "code": "JCA-SCOPE-01",
+    "name": "JCA product scope",
+    "policy": "JCA",
+    "category": "eligibility",
+    "description": "Determines whether the asset is within the phased EU JCA product scope.",
+    "plainEnglishLogic": "Check expected EU authorisation timing, oncology active-substance status, and applicable scope date.",
+    "formalLogic": "new_eu_authorisation AND (oncology_active_substance OR atmp) AND scope_date_reached",
+    "inputFields": [
+      "eu_launch_year",
+      "product_type",
+      "indication"
+    ],
+    "outputFields": [
+      "jca_scope"
+    ],
+    "status": "active",
+    "version": "2.1",
+    "effectiveFrom": "05 Aug 2026",
+    "effectiveTo": "",
+    "owner": "EU Access",
+    "linkedPolicyVersionIds": [
+      "PV-JCA-21"
+    ],
+    "linkedApprovalId": "",
+    "lastUpdatedBy": "Aisha Rahman",
+    "lastUpdatedAt": "05 Aug 2026",
+    "testCases": [
+      {
+        "name": "Oncology new active substance",
+        "input": "Oncology · EU authorisation 2028",
+        "expected": "In scope",
+        "actual": "In scope",
+        "pass": true
+      },
+      {
+        "name": "Out-of-scope product type",
+        "input": "Non-covered product type",
+        "expected": "Out of scope",
+        "actual": "Out of scope",
+        "pass": true
+      }
+    ],
+    "impactedAssetIds": [
+      "TAK-481",
+      "TAK-227",
+      "TAK-909",
+      "TAK-315",
+      "TAK-711",
+      "TEST-100"
+    ]
+  },
+  {
+    "id": "R-JCA-02",
+    "code": "JCA-IMPACT-02",
+    "name": "JCA launch delay estimate",
+    "policy": "JCA",
+    "category": "impact",
+    "description": "Translates JCA evidence readiness and sequencing into a directional EU delay range.",
+    "plainEnglishLogic": "Apply the selected delay assumption when evidence readiness or assessment timing creates launch risk.",
+    "formalLogic": "eu_delay_months = selected_delay_range(evidence_readiness, assessment_timeline)",
+    "inputFields": [
+      "eu_launch_year",
+      "os_maturity",
+      "comparator_evidence",
+      "jca_delay_range"
+    ],
+    "outputFields": [
+      "eu_launch_delay",
+      "revenue_at_risk"
+    ],
+    "status": "active",
+    "version": "2.1",
+    "effectiveFrom": "05 Aug 2026",
+    "effectiveTo": "",
+    "owner": "EU Access",
+    "linkedPolicyVersionIds": [
+      "PV-JCA-21"
+    ],
+    "linkedApprovalId": "APR-2603",
+    "lastUpdatedBy": "Aisha Rahman",
+    "lastUpdatedAt": "05 Aug 2026",
+    "testCases": [
+      {
+        "name": "Base delay",
+        "input": "Partial evidence · 6 months",
+        "expected": "6 month delay",
+        "actual": "6 month delay",
+        "pass": true
+      },
+      {
+        "name": "Downside delay",
+        "input": "Evidence gap · 12 months",
+        "expected": "12 month delay",
+        "actual": "12 month delay",
+        "pass": true
+      }
+    ],
+    "impactedAssetIds": [
+      "TAK-481",
+      "TAK-227",
+      "TAK-909",
+      "TAK-315",
+      "TAK-711",
+      "TEST-100"
+    ]
+  },
+  {
+    "id": "R-GPL-01",
+    "code": "GPL-PROTECT-01",
+    "name": "EU-GPL protection credit",
+    "policy": "EU-GPL",
+    "category": "impact",
+    "description": "Estimates additional market-protection years supported by policy attributes.",
+    "plainEnglishLogic": "Credit protection only for confirmed qualifying evidence and launch conditions; uncertain assumptions remain reviewable.",
+    "formalLogic": "credit = confirmed_unmet_need + comparative_trial + new_indication - supply_gaps",
+    "inputFields": [
+      "unmet_need",
+      "comparative_trial",
+      "new_indication",
+      "supply_status"
+    ],
+    "outputFields": [
+      "protection_years"
+    ],
+    "status": "active",
+    "version": "1.2",
+    "effectiveFrom": "01 Oct 2026",
+    "effectiveTo": "",
+    "owner": "EU Policy",
+    "linkedPolicyVersionIds": [
+      "PV-GPL-12"
+    ],
+    "linkedApprovalId": "",
+    "lastUpdatedBy": "Elena Rossi",
+    "lastUpdatedAt": "01 Oct 2026",
+    "testCases": [
+      {
+        "name": "Confirmed evidence",
+        "input": "Unmet need yes · supply confirmed",
+        "expected": "Protection credit applied",
+        "actual": "Protection credit applied",
+        "pass": true
+      },
+      {
+        "name": "Supply missing",
+        "input": "Supply status unknown",
+        "expected": "Human review required",
+        "actual": "Human review required",
+        "pass": true
+      }
+    ],
+    "impactedAssetIds": [
+      "TAK-481",
+      "TAK-227",
+      "TAK-315",
+      "TAK-711",
+      "TEST-100"
+    ]
+  },
+  {
+    "id": "R-GPL-02",
+    "code": "GPL-SUPPLY-02",
+    "name": "Member State supply gate",
+    "policy": "EU-GPL",
+    "category": "eligibility",
+    "description": "Requires supply evidence before applying EU-GPL market-protection credit.",
+    "plainEnglishLogic": "Do not apply supply-linked protection when Member State supply commitments are missing or unconfirmed.",
+    "formalLogic": "supply_gate = all_required_member_states_confirmed",
+    "inputFields": [
+      "member_state_supply_status",
+      "launch_plan"
+    ],
+    "outputFields": [
+      "supply_gate",
+      "protection_credit_allowed"
+    ],
+    "status": "draft",
+    "version": "0.2-draft",
+    "effectiveFrom": "Pending approval",
+    "effectiveTo": "",
+    "owner": "EU Policy",
+    "linkedPolicyVersionIds": [
+      "PV-GPL-13"
+    ],
+    "linkedApprovalId": "APR-2604",
+    "lastUpdatedBy": "Thomas Weber",
+    "lastUpdatedAt": "13 Oct 2026",
+    "testCases": [
+      {
+        "name": "All states confirmed",
+        "input": "Supply evidence complete",
+        "expected": "Gate passes",
+        "actual": "Gate passes",
+        "pass": true
+      },
+      {
+        "name": "Evidence missing",
+        "input": "Two states unconfirmed",
+        "expected": "Review required",
+        "actual": "Review required",
+        "pass": true
+      }
+    ],
+    "impactedAssetIds": [
+      "TAK-481",
+      "TAK-227",
+      "TAK-315",
+      "TAK-711",
+      "TEST-100"
+    ]
+  }
+]

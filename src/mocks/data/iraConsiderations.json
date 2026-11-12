@@ -1,0 +1,108 @@
+[
+  {
+    "q": "When evaluating portfolio targets, could a biologic treatment option be considered (vs. SME) to benefit from timing of MFP for biologics?",
+    "context": "Based on the current language in the IRA, the initial MFP negotiation date for a product depends on its therapeutic modality, with small molecules subject to MFP negotiation beginning 7 years after launch (effective at Year 9) and biologics subject to MFP negotiation beginning 11 years after launch (effective at Year 13).",
+    "cats": [
+      {
+        "cat": "Consider asset selection",
+        "strategies": [
+          "Consider whether a biologic treatment option can be explored for the same portfolio target to delay initial MFP negotiation and MFP applicability by 4 years as compared to a small molecule, to allow for greater time on market at a non-MFP value, and to shift the TAK portfolio composition over time toward biologics, without limiting promising SME programs",
+          "Evaluate the P&L implications of pursuing a biologic asset as opposed to a SME to determine whether additional costs of biologic development are outweighed by increased revenue expected from delayed MFP negotiations",
+          "If both small molecule and biologic portfolio targets are being considered, evaluate expected revenues, competitive landscapes, and earliest MFP inclusion, factoring in the risk of potential clinical differences that may arise between an SME and a biologic for the same target, to determine whether small molecule development should be discontinued in favor of biologic options"
+        ]
+      }
+    ]
+  },
+  {
+    "q": "When evaluating portfolio targets, can assets with non-Medicare target indications be considered over those in Medicare target indications?",
+    "context": "Based on the current language in the IRA, prioritization for MFP is based on total Medicare expenditures. However, a product may avoid MFP negotiations if it targets primarily commercial populations and keeps annual Medicare-attributable spending below $200 million. The ability to consider non-Medicare target indications may be limited in oncology, but more feasible in other therapeutic areas.",
+    "cats": [
+      {
+        "cat": "Evaluate population selection",
+        "strategies": [
+          "Evaluate P&L impact of continuing asset development in indications expected to generate primarily commercial utilization and/or those that are unlikely to exceed $200M in annual Medicare expenditures",
+          "Evaluate trade-off of prioritizing launch in commercial indication(s) ahead of Medicare indication(s) to delay the time at which the $200M Medicare expenditure threshold is first exceeded versus expectation for decreased overall revenues with slower speed to market in Medicare indications"
+        ]
+      }
+    ]
+  },
+  {
+    "q": "Can your product's indication sequencing or development timelines be adjusted to allow for the indication with the highest revenue potential to spend as many years on the market as possible pre-MFP negotiations / LoE?",
+    "context": "Based on the current language in the IRA, where possible, efforts should be made to prioritize initial launch in the indications with the highest expected revenue generation or to delay launches in indications with lower expected revenues to allow follow-on indications with higher expected revenues to magnify the amount earned pre-MFP negotiations or patent expiration",
+    "cats": [
+      {
+        "cat": "Optimize indication sequencing and evaluate tradeoffs",
+        "strategies": [
+          "Considering anticipated product positioning in each indication, forecast revenues across all expected indications and assess where indications with the highest peak revenues fall on a product’s development timeline",
+          "If the product is planning to launch in an indication with significantly lower expected Medicare revenues (i.e., orphan indication, commercial population) than its follow-on indications, determine whether speed to market can be increased in indications with highest revenue potential",
+          "As MFP inclusion will occur 7 or 11 years following a product’s initial FDA approval, evaluate the revenue trade-off of launching in an indication with earlier data availability and lower revenue potential versus launching in an indication with later data availability and higher revenue potential"
+        ]
+      }
+    ]
+  },
+  {
+    "q": "Of potential competitor products (commercialized or pipeline), are any at high risk of MFP negotiation in advance of your product's anticipated launch date?",
+    "context": "If a relevant competitor to your product exceeds / is expected to exceed the annual $200M Medicare expenditure threshold and does not have a biosimilar available, the product may be at a high risk of being subject to MFP negotiations. If negotiated, its value will be significantly discounted, which may limit the opportunity of your product if the competitor is used by payers as a value benchmark and negotiated prior to your product’s launch or achievement of peak sales",
+    "cats": [
+      {
+        "cat": "Ensure pre-launch evidence packages (including clinical trial, RWE, value dossier, and ITCs) are payer-optimized",
+        "strategies": [
+          "Evaluate evidence generation opportunities to establish clinical differentiation and strengthen product positioning and maintain value, such as exploring the feasibility of a head-to-head trial demonstrating superiority versus relevant MFP-risk competitors",
+          "Evaluate opportunities for subgroup analyses or targeted studies to demonstrate superior outcomes in clinically meaningful patient segments, and generate evidence of differentiation through favorable safety, long-term durability, patient-reported outcomes, or other payer-relevant benefits"
+        ]
+      },
+      {
+        "cat": "Consider post-launch evidence generation",
+        "strategies": [
+          "Understand the product’s therapeutic positioning in its planned indication and high revenue indications to determine which competitor products have the same or similar indications, using CMS data sources and/or analyst forecasts to estimate competitors' Medicare drug spending trend",
+          "Evaluate key characteristics of competitor products that influence MFP inclusion (e.g., Medicare expenditures, biosimilar availability) in order to determine which, if any, are most likely to be subject to MFP",
+          "Estimate the expected level of discount to be applied to MFP high-risk competitor products in order to determine their post-MFP negotiated value (25 – 60% from non-FAMP as the ceiling price, driven by total time on market, adjusted for negotiation factors such as R&D / production costs, federal financial support for development, patent applications, and evidence for therapeutic alternatives -- e.g., therapeutic advance, prescribing information for alternatives, comparative effectiveness, ability to fulfill unmet need, etc.)"
+        ]
+      },
+      {
+        "cat": "Evaluate viability of indication",
+        "strategies": [
+          "Assess overall viability of your product based on expected likelihood and timing of competitor MFP inclusion. Consider not launching in this indication if investments needed for evidence generation requirements to optimize for MFP readiness is higher than the potential revenue upside from launching in this indication."
+        ]
+      }
+    ]
+  },
+  {
+    "q": "If competitors within your product’s approved indication(s) are at high risk of MFP negotiations, is your product clinically differentiated enough to avoid benchmarking to post-MFP negotiated values of these competitors?",
+    "context": "In the absence of significant clinical differentiation, payers may leverage the post-MFP negotiation value of competitor products to inform their value expectations for your product, which may lower overall value and reduce the attractiveness of launching in certain indications.",
+    "cats": [
+      {
+        "cat": "Consider post-launch evidence generation",
+        "strategies": [
+          "Estimate the expected level of discount to be applied to MFP high-risk competitor products in order to determine their post-MFP negotiated value (25 – 60% discounts expected depending on total time on market)",
+          "Evaluate evidence generation opportunities to differentiate your product’s clinical profile early in the life cycle as compared to competitors",
+          "If no meaningful differentiation is demonstrated, re-evaluate the indication’s value and assess the trade-off between pursuing launch (despite limited value recognition and spillover risk to other indications) vs. deferring launch in high-risk segments to protect overall asset value"
+        ]
+      }
+    ]
+  },
+  {
+    "q": "Do you expect the SoC to change between launch and MFP negotiation?",
+    "context": "Change of SoC may also introduce a shift of potential relevant competitors / comparators to your product.",
+    "cats": [
+      {
+        "cat": "Consider post-launch evidence generation",
+        "strategies": [
+          "Evaluate evidence generation opportunities against new SoC to minimize discounts negotiated if your product undergoes MFP selection. Lack of data against the correct comparator may hinder payer's perception of your product's value and incremental benefit."
+        ]
+      }
+    ]
+  },
+  {
+    "q": "Do you expect relevant competitors to launch new data before your MFP eligibility?",
+    "context": "Pre-MFP competitor data can materially raise the bar for clinical differentiation at time of MFP, even if your product's data have not changed",
+    "cats": [
+      {
+        "cat": "Consider post-launch evidence generation",
+        "strategies": [
+          "Evaluate post-launch evidence generation to reinforce clinical differentiation amid evolving competitor data and mitigate risk to value during MFP negotiations"
+        ]
+      }
+    ]
+  }
+]

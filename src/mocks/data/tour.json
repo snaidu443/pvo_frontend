@@ -1,0 +1,61 @@
+[
+  {
+    "title": "A directional view of policy value",
+    "text": "Global Policy Value Optimizer brings asset assumptions, global policy exposure, and decision-ready recommendations into one governed workspace.",
+    "points": [
+      "Designed for pipeline asset reviews and development decisions.",
+      "Directional assessment, separate from downstream quantitative forecast modelling."
+    ],
+    "icon": "overview"
+  },
+  {
+    "title": "How it works",
+    "text": "Four steps. Work in order, or return to any finished step.",
+    "points": [
+      "Submit inputs › Review › Eligibility › Impact & actions",
+      "AI first pass — Reads documents, suggests values and answers",
+      "You decide — Accept, change or add before use"
+    ],
+    "icon": "upload"
+  },
+  {
+    "title": "Where the data comes from",
+    "text": "Sample data only.",
+    "points": [
+      "Program setup — Asset, modality, route, class, indications",
+      "Documents — Competitive Intelligence, Trial Protocol Concept Sheet, CDP, Forecast Assumptions",
+      "Extracted fields — Source, confidence, policies fed",
+      "Revenue forecast — Illustrative baseline from your forecast file"
+    ],
+    "icon": "governance"
+  },
+  {
+    "title": "Reading the results",
+    "text": "Illustrative. Not a forecast or advice.",
+    "points": [
+      "Eligibility — Pass = in scope. Open a check for its source.",
+      "Revenue at risk — Lifetime revenue a policy may remove.",
+      "Waterfall — Gross to net to mitigated. Scenarios rescale it.",
+      "Sensitivity — Inputs ranked by impact, Low to High."
+    ],
+    "icon": "impact"
+  },
+  {
+    "title": "Monitor new policy documents",
+    "text": "Source pipelines check the official policy websites and list new policy documents for IRA, MFN, JCA and EU-GPL.",
+    "points": [
+      "Each document has a link to the source and a short AI summary.",
+      "The list is read-only; rules and assessments do not change automatically."
+    ],
+    "icon": "clock"
+  },
+  {
+    "title": "Browse the policy rules",
+    "text": "The Rules Engine lists the current active rules from the policy framework, policy by policy.",
+    "points": [
+      "Open a rule to see its citation and the official source document.",
+      "Read-only: rules are updated offline."
+    ],
+    "icon": "eligibility"
+  }
+]

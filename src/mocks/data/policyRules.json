@@ -1,0 +1,812 @@
+[
+  {
+    "id": "IRA-I-01",
+    "policy": "IRA",
+    "category": "Eligibility",
+    "name": "Medicare Population",
+    "text": "Could any Medicare-eligible patients (above 65 years of age) receive this product, even as a minority of the target population?",
+    "inputFields": [
+      "medicare_share"
+    ],
+    "citations": [
+      {
+        "id": "CIT-IRA-01",
+        "quote": "A qualifying single source drug is a covered Part D drug, or a drug or biological product for which payment may be made under Part B, that is used by Medicare beneficiaries (illustrative)",
+        "doc": "Medicare Drug Price Negotiation Program · IPAY 2028 final guidance (CMS)",
+        "docType": "Final guidance",
+        "url": "https://www.cms.gov/files/document/ipay-2028-final-guidance.pdf",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "IRA-I-02",
+    "policy": "IRA",
+    "category": "Eligibility",
+    "name": "Administration Setting / Medicare Coverage",
+    "text": "What is your product’s administration setting and anticipated Medicare coverage?",
+    "inputFields": [
+      "medicare_coverage"
+    ],
+    "citations": [
+      {
+        "id": "CIT-IRA-02",
+        "quote": "Selected drugs include covered Part D drugs and drugs and biological products payable under Medicare Part B, whether furnished in an inpatient or outpatient setting (illustrative)",
+        "doc": "Medicare Drug Price Negotiation Program · IPAY 2028 final guidance (CMS)",
+        "docType": "Final guidance",
+        "url": "https://www.cms.gov/files/document/ipay-2028-final-guidance.pdf",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "IRA-I-03",
+    "policy": "IRA",
+    "category": "Eligibility",
+    "name": "Orphan Indication",
+    "text": "Will your product launch into any non-orphan indications?",
+    "inputFields": [
+      "orphan_status"
+    ],
+    "citations": [
+      {
+        "id": "CIT-IRA-03",
+        "quote": "A drug designated for only one or more rare diseases or conditions, and approved only for indications within those designations, is excluded from the definition of a qualifying single source drug (illustrative)",
+        "doc": "Medicare Drug Price Negotiation Program · IPAY 2028 final guidance (CMS)",
+        "docType": "Final guidance",
+        "url": "https://www.cms.gov/files/document/ipay-2028-final-guidance.pdf",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "IRA-I-04",
+    "policy": "IRA",
+    "category": "Eligibility",
+    "name": "Medicare Population & Expenditures",
+    "text": "Considering any Medicare-eligible population (even as a subset / minority of the target population), is your product expected to exceed $200M in annual Medicare-attributable expenditures across all planned indications?",
+    "inputFields": [
+      "annual_medicare_spend"
+    ],
+    "citations": [
+      {
+        "id": "CIT-IRA-04",
+        "quote": "total expenditures under parts B and D exceed $200,000,000 in the 12-month period (illustrative)",
+        "doc": "Medicare Drug Price Negotiation Program final guidance · Federal Register 2025-21501",
+        "docType": "Final guidance",
+        "url": "https://www.federalregister.gov/documents/2025/11/28/2025-21501/medicare-program-inflation-reduction-act-ira-medicare-drug-price-negotiation-program-final-guidance",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "IRA-I-05",
+    "policy": "IRA",
+    "category": "Eligibility",
+    "name": "Loss of Exclusivity",
+    "text": "Will your product have an available generic or biosimilar under Bona Fide Marketing in advance of its earliest potential MFP inclusion date, i.e., two years in advance of MFP effective date (7 years post-approval for SME, or 11 years post-approval for biologics)?",
+    "inputFields": [
+      "generic_entry_year",
+      "modality"
+    ],
+    "citations": [
+      {
+        "id": "CIT-IRA-05",
+        "quote": "CMS will consider a generic or biosimilar to be marketed when there is bona fide marketing (illustrative)",
+        "doc": "Medicare Drug Price Negotiation Program final guidance · Federal Register 2025-21501",
+        "docType": "Final guidance",
+        "url": "https://www.federalregister.gov/documents/2025/11/28/2025-21501/medicare-program-inflation-reduction-act-ira-medicare-drug-price-negotiation-program-final-guidance",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "IRA-II-01",
+    "policy": "IRA",
+    "category": "Policy consideration",
+    "name": "When evaluating portfolio targets, could a biologic treatment option be considered (vs. SME) to benefit from timing of MFP for biologics?",
+    "text": "When evaluating portfolio targets, could a biologic treatment option be considered (vs. SME) to benefit from timing of MFP for biologics?",
+    "citations": [
+      {
+        "id": "CIT-IRA-06",
+        "quote": "Small-molecule drugs become eligible for selection 7 years after approval and biological products 11 years after licensure, with the maximum fair price taking effect two years after selection (illustrative)",
+        "doc": "Medicare Drug Price Negotiation Program · IPAY 2028 final guidance (CMS)",
+        "docType": "Final guidance",
+        "url": "https://www.cms.gov/files/document/ipay-2028-final-guidance.pdf",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "IRA-II-02",
+    "policy": "IRA",
+    "category": "Policy consideration",
+    "name": "When evaluating portfolio targets, can assets with non-Medicare target indications be considered over those in Medicare target indications?",
+    "text": "When evaluating portfolio targets, can assets with non-Medicare target indications be considered over those in Medicare target indications?",
+    "citations": [
+      {
+        "id": "CIT-IRA-07",
+        "quote": "Drugs with total expenditures under Parts B and D of less than $200,000,000, as adjusted, are excluded from selection as low-spend Medicare drugs (illustrative)",
+        "doc": "Medicare Drug Price Negotiation Program · IPAY 2028 final guidance (CMS)",
+        "docType": "Final guidance",
+        "url": "https://www.cms.gov/files/document/ipay-2028-final-guidance.pdf",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "IRA-II-03",
+    "policy": "IRA",
+    "category": "Policy consideration",
+    "name": "Can your product's indication sequencing or development timelines be adjusted to allow for the indication with the highest revenue potential to spend as many years on the market as possible pre-MFP negotiations / LoE?",
+    "text": "Can your product's indication sequencing or development timelines be adjusted to allow for the indication with the highest revenue potential to spend as many years on the market as possible pre-MFP negotiations / LoE?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "IRA-II-04",
+    "policy": "IRA",
+    "category": "Policy consideration",
+    "name": "Of potential competitor products (commercialized or pipeline), are any at high risk of MFP negotiation in advance of your product's anticipated launch date?",
+    "text": "Of potential competitor products (commercialized or pipeline), are any at high risk of MFP negotiation in advance of your product's anticipated launch date?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "IRA-II-05",
+    "policy": "IRA",
+    "category": "Policy consideration",
+    "name": "If competitors within your product’s approved indication(s) are at high risk of MFP negotiations, is your product clinically differentiated enough to avoid benchmarking to post-MFP negotiated values of these competitors?",
+    "text": "If competitors within your product’s approved indication(s) are at high risk of MFP negotiations, is your product clinically differentiated enough to avoid benchmarking to post-MFP negotiated values of these competitors?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "IRA-II-06",
+    "policy": "IRA",
+    "category": "Policy consideration",
+    "name": "Do you expect the SoC to change between launch and MFP negotiation?",
+    "text": "Do you expect the SoC to change between launch and MFP negotiation?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "IRA-II-07",
+    "policy": "IRA",
+    "category": "Policy consideration",
+    "name": "Do you expect relevant competitors to launch new data before your MFP eligibility?",
+    "text": "Do you expect relevant competitors to launch new data before your MFP eligibility?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "MFN-IA-01",
+    "policy": "MFN",
+    "category": "Eligibility",
+    "name": "Launch Region",
+    "text": "Will your product launch in the US and any of the MFN reference basket countries?\n\nMFN Reference Countries: Australia, Austria, Belgium, Canada, Czech Republic, Denmark, France, Germany, Ireland, Israel, Italy, Japan, Netherlands, Norway, South Korea, Spain, Sweden, Switzerland, United Kingdom",
+    "inputFields": [
+      "us_launch_year",
+      "eu_launch_year"
+    ],
+    "citations": [
+      {
+        "id": "CIT-MFN-01",
+        "quote": "CMS is finalizing that the set of reference countries for Method I and Method II benchmarks, as set forth in § 513.310(b), will include Australia, Austria, Belgium, Canada, Czech Republic, Denmark, France, Germany, Ireland, Israel, Italy, Japan, Netherlands, Norway, South Korea, Spain, Sweden, Switzerland, and the United Kingdom.",
+        "doc": "GLOBE Model final rule · Federal Register 2026-20281",
+        "docType": "Final rule",
+        "url": "https://www.federalregister.gov/d/2026-20281/p-46",
+        "illustrative": false
+      }
+    ]
+  },
+  {
+    "id": "MFN-IA-02",
+    "policy": "MFN",
+    "category": "Eligibility",
+    "name": "CMS Population",
+    "text": "Will your product launch into an indication with a Medicare-relevant target population (i.e., disease / condition with diagnosis in patients above 65 years of age)?\n\n*) Assuming GENEROUS remains optional and thus will have more limited impact to Medicaid population",
+    "inputFields": [
+      "medicare_share"
+    ],
+    "citations": [
+      {
+        "id": "CIT-MFN-02",
+        "quote": "The Model applies to drugs furnished to Medicare beneficiaries; participation in the Medicaid GENEROUS model is voluntary (illustrative)",
+        "doc": "GLOBE Model final rule · Federal Register 2026-20281",
+        "docType": "Final rule",
+        "url": "https://www.federalregister.gov/documents/2026/10/02/2026-20281/global-benchmark-for-efficient-drug-pricing-globe-model",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "MFN-IA-03",
+    "policy": "MFN",
+    "category": "Eligibility",
+    "name": "Admin. Setting / CMS Coverage",
+    "text": "What is your product’s administration setting or anticipated CMS coverage?",
+    "inputFields": [
+      "medicare_coverage"
+    ],
+    "citations": [
+      {
+        "id": "CIT-MFN-03",
+        "quote": "GLOBE applies to Part B rebatable drugs administered in the inpatient or outpatient setting; GUARD applies to Part D drugs dispensed to beneficiaries (illustrative)",
+        "doc": "GLOBE Model final rule · Federal Register 2026-20281",
+        "docType": "Final rule",
+        "url": "https://www.federalregister.gov/documents/2026/10/02/2026-20281/global-benchmark-for-efficient-drug-pricing-globe-model",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "MFN-IA-04",
+    "policy": "MFN",
+    "category": "Eligibility",
+    "name": "Medicare Expenditures",
+    "text": "Is your product expected to exceed the annual benchmark Medicare expenditures of $100M for Medicare Part B or $69M for Medicare Part D across all planned indications?",
+    "inputFields": [
+      "annual_medicare_spend",
+      "medicare_coverage"
+    ],
+    "citations": [
+      {
+        "id": "CIT-MFN-04",
+        "quote": "Part D drugs with total Medicare expenditures above $69 million (illustrative)",
+        "doc": "GUARD Model final rule · Federal Register 2025-23705",
+        "docType": "Final rule",
+        "url": "https://www.federalregister.gov/documents/2025/12/23/2025-23705/guarding-us-medicare-against-rising-drug-costs-guard-model",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "MFN-IA-05",
+    "policy": "MFN",
+    "category": "Eligibility",
+    "name": "Therapetic Class",
+    "text": "Does your product fall under one of the therapeutic classes included in the respective MFN model?\n\n*) GLOBE (Medicare Part B) TAs: antigout agents, antineoplastics, blood products and modifiers, central nervous system agents, immunological agents, metabolic bone disease agents, and ophthalmic agents\n\n*) GUARD (Medicare Part D) TAs: analgesics, anticonvulsants, antidepressants, antimigraine agents, antineoplastics, antipsychotics., antivirals, bipolar agents, blood glucose regulators, cardiovascular agents, central nervous system agents, gastrointestinal agents, genetic or enzyme or protein disorder replacement or modifiers or treatment, immunological agents, metabolic bone disease agents, ophthalmic agents, respiratory tract or pulmonary agents",
+    "inputFields": [
+      "therapeutic_class"
+    ],
+    "citations": [
+      {
+        "id": "CIT-MFN-05",
+        "quote": "Antigout Agents, Antineoplastics, Blood Products and Modifiers, Central Nervous System Agents, Immunological Agents, Metabolic Bone Disease Agents, and Ophthalmic Agents",
+        "doc": "GLOBE Model final rule · Federal Register 2026-20281",
+        "docType": "Final rule",
+        "url": "https://www.federalregister.gov/d/2026-20281/p-37",
+        "illustrative": false
+      },
+      {
+        "id": "CIT-MFN-05B",
+        "quote": "The following drugs and biological products are excluded from the GLOBE Model as set forth in § 513.130(c): (1) a Part B rebatable drug for applicable calendar quarters prior to the first applicable calendar quarter for which CMS identifies a specified amount under 42 CFR 427.302(b); (2) a Part B rebatable drug for which a maximum fair price under the Medicare Drug Price Negotiation Program is in effect; (3) a drug or biological product which is no longer a Part B rebatable drug; (4) a Part B rebatable drug that is designated as a drug for one or more rare diseases or conditions under section 526 of the Federal Food, Drug, and Cosmetic Act (21 U.S.C. 360bb) and for which the only approved indication (or indications) is for one or more such rare disease or conditions; (5) a Part B rebatable drug that is a product listed on the FDA Approved Cellular and Gene Therapy Products website; and (6) a Part B rebatable drug that is a plasma-derived product as set forth in 42 CFR 427.400. Items (4), (5), and (6) were added to § 513.130(c) in response to public comments received during the comment period for the GLOBE Model proposed rule (90 FR 60244 through 60336). Drug selection (and removal, if applicable) for the model test will be determined by CMS based on the eligibility criteria and will not be subject to appeal, pursuant to section 1115A(d)(2) of the Act.",
+        "doc": "GLOBE Model final rule · Federal Register 2026-20281",
+        "docType": "Final rule",
+        "url": "https://www.federalregister.gov/d/2026-20281/p-38",
+        "illustrative": false
+      }
+    ]
+  },
+  {
+    "id": "MFN-IA-06",
+    "policy": "MFN",
+    "category": "Eligibility",
+    "name": "Asset Type",
+    "text": "Is your product a cell and gene therapy (CGT) or plasma-derived products?\n\n*) CGTs include cellular immunotherapies, cancer vaccines and other products aimed to treat or prevent certain diseases including cancer, genetic diseases, and infectious diseases",
+    "inputFields": [
+      "modality"
+    ],
+    "citations": [
+      {
+        "id": "CIT-MFN-06",
+        "quote": "(5) a Part B rebatable drug that is a product listed on the FDA Approved Cellular and Gene Therapy Products website; and (6) a Part B rebatable drug that is a plasma-derived product as set forth in 42 CFR 427.400.",
+        "doc": "GLOBE Model final rule · Federal Register 2026-20281",
+        "docType": "Final rule",
+        "url": "https://www.federalregister.gov/d/2026-20281/p-38",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "MFN-IA-07",
+    "policy": "MFN",
+    "category": "Eligibility",
+    "name": "Orphan Designation",
+    "text": "Will your product launch into any non-orphan indications?",
+    "inputFields": [
+      "orphan_status"
+    ],
+    "citations": [
+      {
+        "id": "CIT-MFN-07",
+        "quote": "(4) a Part B rebatable drug that is designated as a drug for one or more rare diseases or conditions under section 526 of the Federal Food, Drug, and Cosmetic Act (21 U.S.C. 360bb) and for which the only approved indication (or indications) is for one or more such rare disease or conditions;",
+        "doc": "GLOBE Model final rule · Federal Register 2026-20281",
+        "docType": "Final rule",
+        "url": "https://www.federalregister.gov/d/2026-20281/p-38",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "MFN-IB-01",
+    "policy": "MFN",
+    "category": "Degree of impact",
+    "name": "Population / Payer Mix",
+    "text": "Will the product have any exposure to Medicare populations in the US? *) Assuming GENEROUS remains optional",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "MFN-IB-02",
+    "policy": "MFN",
+    "category": "Degree of impact",
+    "name": "Regional Value Difference",
+    "text": "Is there a potentially high discrepancy in payer value recognition between US and ex-US (MFN reference basket countries)?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "MFN-IB-03",
+    "policy": "MFN",
+    "category": "Degree of impact",
+    "name": "Regional Revenue Difference",
+    "text": "Will US revenue represent a substantial portion (>50%) of the product's total revenue relative to ex-US markets?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "MFN-II-01",
+    "policy": "MFN",
+    "category": "Policy consideration",
+    "name": "When evaluating portfolio targets, can assets with non-Medicare target indications be considered over those in Medicare target indications or can development and evidence generation timelines be changed to prioritize indication approvals tied to non-Medicare utilization?",
+    "text": "When evaluating portfolio targets, can assets with non-Medicare target indications be considered over those in Medicare target indications or can development and evidence generation timelines be changed to prioritize indication approvals tied to non-Medicare utilization?",
+    "citations": [
+      {
+        "id": "CIT-MFN-08",
+        "quote": "Drugs are identified for the Model where annual Medicare expenditures exceed $100 million for Part B or $69 million for Part D (illustrative)",
+        "doc": "GUARD Model final rule · Federal Register 2025-23705",
+        "docType": "Final rule",
+        "url": "https://www.federalregister.gov/documents/2025/12/23/2025-23705/guarding-us-medicare-against-rising-drug-costs-guard-model",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "MFN-II-02",
+    "policy": "MFN",
+    "category": "Policy consideration",
+    "name": "Is it possible to pursue a different population between US vs. ex-US?",
+    "text": "Is it possible to pursue a different population between US vs. ex-US?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "MFN-II-03",
+    "policy": "MFN",
+    "category": "Policy consideration",
+    "name": "Does your product have clinical trial sites / local evidence generation in countries of potential launch interest?",
+    "text": "Does your product have clinical trial sites / local evidence generation in countries of potential launch interest?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "MFN-II-04",
+    "policy": "MFN",
+    "category": "Policy consideration",
+    "name": "Does the clinical trial include robust head‑to‑head data with highest-priced SoC comparator or methodologically sound indirect treatment comparisons where H2H trials are not feasible?",
+    "text": "Does the clinical trial include robust head‑to‑head data with highest-priced SoC comparator or methodologically sound indirect treatment comparisons where H2H trials are not feasible?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "MFN-II-05",
+    "policy": "MFN",
+    "category": "Policy consideration",
+    "name": "Does the trial population align with real-world population and is sufficiently powered?",
+    "text": "Does the trial population align with real-world population and is sufficiently powered?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "MFN-II-06",
+    "policy": "MFN",
+    "category": "Policy consideration",
+    "name": "Do the endpoint selections and duration of follow-up align with payer expectations?",
+    "text": "Do the endpoint selections and duration of follow-up align with payer expectations?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "MFN-II-07",
+    "policy": "MFN",
+    "category": "Policy consideration",
+    "name": "Is your product clinically differentiated enough to ensure payer value recognition?",
+    "text": "Is your product clinically differentiated enough to ensure payer value recognition?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "MFN-II-08",
+    "policy": "MFN",
+    "category": "Policy consideration",
+    "name": "Ex-US, can your product's indication sequencing be adjusted to minimize value erosion pre-MFN selection?",
+    "text": "Ex-US, can your product's indication sequencing be adjusted to minimize value erosion pre-MFN selection?",
+    "citations": [
+      {
+        "id": "CIT-MFN-09",
+        "quote": "A selected drug remains in the Model for the remainder of the performance year; benchmarks are recalculated quarterly for Part B and annually for Part D (illustrative)",
+        "doc": "GLOBE Model final rule · Federal Register 2026-20281",
+        "docType": "Final rule",
+        "url": "https://www.federalregister.gov/documents/2026/10/02/2026-20281/global-benchmark-for-efficient-drug-pricing-globe-model",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "MFN-II-09",
+    "policy": "MFN",
+    "category": "Policy consideration",
+    "name": "Is a differential launch strategy possible between US vs. ex-US?",
+    "text": "Is a differential launch strategy possible between US vs. ex-US?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "MFN-II-10",
+    "policy": "MFN",
+    "category": "Policy consideration",
+    "name": "Does clinical development generate sufficient evidence to support optimal SKU strategy?",
+    "text": "Does clinical development generate sufficient evidence to support optimal SKU strategy?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "JCA-IA-01",
+    "policy": "JCA",
+    "category": "Eligibility",
+    "name": "Cancer Treatment or ATMP",
+    "text": "Is your product a new active substance for which the therapeutic indication is the treatment of cancer, or an advanced therapy medicinal product (ATMP; e.g., cell or gene therapy), with an MAA submitted to the EMA on or after January 2025?",
+    "inputFields": [
+      "therapeutic_class",
+      "eu_launch_year"
+    ],
+    "citations": [
+      {
+        "id": "CIT-JCA-01",
+        "quote": "Medicinal products with new active substances for which the applicant declares that it contains a new active substance for the treatment of cancer, and advanced therapy medicinal products, from 12 January 2025 (illustrative)",
+        "doc": "Regulation (EU) 2021/2282 on health technology assessment",
+        "docType": "Regulation",
+        "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32021R2282",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "JCA-IA-02",
+    "policy": "JCA",
+    "category": "Eligibility",
+    "name": "Orphan Medicinal Product",
+    "text": "Is your product a designated orphan medicinal product with an MAA submitted to the EMA (full marketing authorisation under the centralized procedure) on or after January 2028?",
+    "inputFields": [
+      "orphan_status",
+      "eu_launch_year"
+    ],
+    "citations": [
+      {
+        "id": "CIT-JCA-02",
+        "quote": "Medicinal products designated as orphan medicinal products, from 13 January 2028 (illustrative)",
+        "doc": "Regulation (EU) 2021/2282 on health technology assessment",
+        "docType": "Regulation",
+        "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32021R2282",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "JCA-IA-03",
+    "policy": "JCA",
+    "category": "Eligibility",
+    "name": "All Other Medicinal Products",
+    "text": "Is your product filing for a full EMA MAA, or its first EMA marketing authorisation, on or after January 2030?",
+    "inputFields": [
+      "eu_launch_year"
+    ],
+    "citations": [
+      {
+        "id": "CIT-JCA-03",
+        "quote": "All other medicinal products within the scope, from 13 January 2030 (illustrative)",
+        "doc": "Regulation (EU) 2021/2282 on health technology assessment",
+        "docType": "Regulation",
+        "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32021R2282",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "JCA-IA-04",
+    "policy": "JCA",
+    "category": "Eligibility",
+    "name": "Label Extensions",
+    "text": "If your product is filing for a label extension, will your product require a JCA for its first indication?",
+    "inputFields": [
+      "eu_launch_year"
+    ],
+    "citations": [],
+    "noCitation": "Pending"
+  },
+  {
+    "id": "JCA-IB-01",
+    "policy": "JCA",
+    "category": "Regulatory advice",
+    "name": "Is this product suitable for a Joint Scientific Consultation (JSC)?",
+    "text": "Is this product suitable for a Joint Scientific Consultation (JSC)?",
+    "citations": [
+      {
+        "id": "CIT-JCA-04",
+        "quote": "Joint scientific consultations may be requested for medicinal products likely to be subject to a joint clinical assessment, before the start of pivotal studies (illustrative)",
+        "doc": "European Commission · Joint scientific consultations",
+        "docType": "Web page",
+        "url": "https://health.ec.europa.eu/health-technology-assessment/implementation-regulation-health-technology-assessment/joint-scientific-consultations_en",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "JCA-II-01",
+    "policy": "JCA",
+    "category": "Policy consideration",
+    "name": "Is your trial a head-to-head study?",
+    "text": "Is your trial a head-to-head study?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "JCA-II-02",
+    "policy": "JCA",
+    "category": "Policy consideration",
+    "name": "Is the comparator in your study relevant?",
+    "text": "Is the comparator in your study relevant?",
+    "citations": [
+      {
+        "id": "CIT-JCA-05",
+        "quote": "The assessment scope shall reflect the parameters requested by Member States, including the population, intervention, comparators and health outcomes (PICO) (illustrative)",
+        "doc": "Implementing Regulation (EU) 2024/1381",
+        "docType": "Regulation",
+        "url": "https://eur-lex.europa.eu/eli/reg_impl/2024/1381/oj/eng",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "JCA-II-03",
+    "policy": "JCA",
+    "category": "Policy consideration",
+    "name": "What implications does the trial population have on the subgroup strategy?",
+    "text": "What implications does the trial population have on the subgroup strategy?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "JCA-II-04",
+    "policy": "JCA",
+    "category": "Policy consideration",
+    "name": "Would the endpoints in the clinical trial be considered patient-centered?",
+    "text": "Would the endpoints in the clinical trial be considered patient-centered?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "JCA-II-05",
+    "policy": "JCA",
+    "category": "Policy consideration",
+    "name": "Is the protocol and statistical analysis plan optimised for JCA?",
+    "text": "Is the protocol and statistical analysis plan optimised for JCA?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "JCA-II-06",
+    "policy": "JCA",
+    "category": "Policy consideration",
+    "name": "Are there prior JCA insights from competitors?",
+    "text": "Are there prior JCA insights from competitors?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "JCA-II-07",
+    "policy": "JCA",
+    "category": "Policy consideration",
+    "name": "Have the key stakeholders for JCA delivery been identified and planned for?",
+    "text": "Have the key stakeholders for JCA delivery been identified and planned for?",
+    "citations": [],
+    "noCitation": "NA"
+  },
+  {
+    "id": "JCA-II-08",
+    "policy": "JCA",
+    "category": "Policy consideration",
+    "name": "Is the regulatory strategy aligned with JCA delivery (e.g., MAA filing timing, indication wording, label scenarios, and sequencing of subsequent indications)?",
+    "text": "Is the regulatory strategy aligned with JCA delivery (e.g., MAA filing timing, indication wording, label scenarios, and sequencing of subsequent indications)?",
+    "citations": [
+      {
+        "id": "CIT-JCA-06",
+        "quote": "The health technology developer shall submit the dossier no later than 45 days before the expected date of the CHMP opinion (illustrative)",
+        "doc": "Implementing Regulation (EU) 2024/1381",
+        "docType": "Regulation",
+        "url": "https://eur-lex.europa.eu/eli/reg_impl/2024/1381/oj/eng",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "GPL-IA-01",
+    "policy": "EU-GPL",
+    "category": "Eligibility",
+    "name": "Launch Region and Timing 1",
+    "text": "Is your product pursuing a new marketing authorization application (MAA) in the EU between December 2026 and December 2028?",
+    "inputFields": [
+      "eu_launch_year"
+    ],
+    "citations": [
+      {
+        "id": "CIT-GPL-01",
+        "quote": "Transitional provisions shall apply to products authorised between December 2026 and December 2028 (illustrative)",
+        "doc": "Council compromise text rev. 2",
+        "docType": "Draft legislative text",
+        "url": "https://data.consilium.europa.eu/doc/document/ST-7106-2026-REV-2/en/pdf",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "GPL-IA-02",
+    "policy": "EU-GPL",
+    "category": "Eligibility",
+    "name": "Launch Region and Timing 2",
+    "text": "Is your product pursuing a new marketing authorization application (MAA) in the EU from January 2029 and beyond?",
+    "inputFields": [
+      "eu_launch_year"
+    ],
+    "citations": [
+      {
+        "id": "CIT-GPL-02",
+        "quote": "This Regulation shall apply to applications submitted from 1 January 2029 (illustrative)",
+        "doc": "Council compromise text rev. 2",
+        "docType": "Draft legislative text",
+        "url": "https://data.consilium.europa.eu/doc/document/ST-7105-2026-REV-2/en/pdf",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "GPL-IIA-01",
+    "policy": "EU-GPL",
+    "category": "Policy consideration",
+    "name": "Does the product plan to launch in an orphan indication?",
+    "text": "Does the product plan to launch in an orphan indication?",
+    "citations": [
+      {
+        "id": "CIT-GPL-03",
+        "quote": "Orphan medicinal products shall benefit from a period of market exclusivity of 9 years, granted once per product (illustrative)",
+        "doc": "EU pharmaceutical legislation · draft Regulation (Council, 29 Sep 2026)",
+        "docType": "Draft legislative text",
+        "url": "https://data.consilium.europa.eu/doc/document/ST-7105-2026-REV-2/en/pdf",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "GPL-IIA-02",
+    "policy": "EU-GPL",
+    "category": "Policy consideration",
+    "name": "Can the product qualify for ODD Breakthrough Designation?",
+    "text": "Can the product qualify for ODD Breakthrough Designation?",
+    "citations": [
+      {
+        "id": "CIT-GPL-04",
+        "quote": "Breakthrough orphan medicinal products addressing a high unmet medical need shall benefit from 11 years of market exclusivity (illustrative)",
+        "doc": "EU pharmaceutical legislation · draft Regulation (Council, 29 Sep 2026)",
+        "docType": "Draft legislative text",
+        "url": "https://data.consilium.europa.eu/doc/document/ST-7105-2026-REV-2/en/pdf",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "GPL-IIA-03",
+    "policy": "EU-GPL",
+    "category": "Policy consideration",
+    "name": "Product ineligible for orphan designation",
+    "text": "Product ineligible for orphan designation",
+    "citations": [
+      {
+        "id": "CIT-GPL-05",
+        "quote": "Medicinal products shall benefit from a regulatory data protection period of 8 years from the date of the marketing authorisation (illustrative)",
+        "doc": "EU pharmaceutical legislation · draft Directive (Council, 29 Sep 2026)",
+        "docType": "Draft legislative text",
+        "url": "https://data.consilium.europa.eu/doc/document/ST-7106-2026-REV-2/en/pdf",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "GPL-IIB-01",
+    "policy": "EU-GPL",
+    "category": "Policy consideration",
+    "name": "Does the product have future planned indication launches?",
+    "text": "Does the product have future planned indication launches?",
+    "citations": [
+      {
+        "id": "CIT-GPL-06",
+        "quote": "An additional period of 1 year of market protection shall be granted for a new therapeutic indication, once per product (illustrative)",
+        "doc": "EU pharmaceutical legislation · draft Directive (Council, 29 Sep 2026)",
+        "docType": "Draft legislative text",
+        "url": "https://data.consilium.europa.eu/doc/document/ST-7106-2026-REV-2/en/pdf",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "GPL-IIB-02",
+    "policy": "EU-GPL",
+    "category": "Policy consideration",
+    "name": "If Non-Orphan Drug: Does the pre-launch evidence package include comparative clinical trials, especially in EU MS?",
+    "text": "If Non-Orphan Drug: Does the pre-launch evidence package include comparative clinical trials, especially in EU MS?",
+    "citations": [
+      {
+        "id": "CIT-GPL-07",
+        "quote": "An additional 1 year of market protection may be granted where comparative clinical trials have been conducted in accordance with scientific advice (illustrative)",
+        "doc": "EU pharmaceutical legislation · draft Directive (Council, 29 Sep 2026)",
+        "docType": "Draft legislative text",
+        "url": "https://data.consilium.europa.eu/doc/document/ST-7106-2026-REV-2/en/pdf",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "GPL-IIB-03",
+    "policy": "EU-GPL",
+    "category": "Policy consideration",
+    "name": "If Non-Orphan Drug: [PLACEHOLDER] Does the product address an unmet medical need (UMN)?",
+    "text": "If Non-Orphan Drug: [PLACEHOLDER] Does the product address an unmet medical need (UMN)?",
+    "citations": [],
+    "noCitation": "Pending"
+  },
+  {
+    "id": "GPL-IIC-01",
+    "policy": "EU-GPL",
+    "category": "Policy consideration",
+    "name": "Are there any EU markets where you forsee an access challenge?",
+    "text": "Are there any EU markets where you forsee an access challenge?",
+    "citations": [
+      {
+        "id": "CIT-GPL-11",
+        "quote": "within 3 years of the request the product shall be supplied continuously (illustrative)",
+        "doc": "Council compromise text rev. 2",
+        "docType": "Draft legislative text",
+        "url": "https://data.consilium.europa.eu/doc/document/ST-7106-2026-REV-2/en/pdf",
+        "illustrative": true
+      }
+    ]
+  },
+  {
+    "id": "GPL-IIC-02",
+    "policy": "EU-GPL",
+    "category": "Policy consideration",
+    "name": "Does the evidence package contain an environmental risk assessment (ERA)?",
+    "text": "Does the evidence package contain an environmental risk assessment (ERA)?",
+    "citations": [
+      {
+        "id": "CIT-GPL-12",
+        "quote": "The application for marketing authorisation shall be accompanied by an environmental risk assessment (illustrative)",
+        "doc": "EU pharmaceutical legislation · draft Directive (Council, 29 Sep 2026)",
+        "docType": "Draft legislative text",
+        "url": "https://data.consilium.europa.eu/doc/document/ST-7106-2026-REV-2/en/pdf",
+        "illustrative": true
+      }
+    ]
+  }
+]

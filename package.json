@@ -1,0 +1,36 @@
+{
+  "name": "global-policy-value-optimizer",
+  "private": true,
+  "version": "0.3.0",
+  "description": "Policy Value Optimizer (Takeda) - React + TypeScript front end. Runs on JSON mock data until the REST APIs are available.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.15"
+  },
+  "scripts": {
+    "dev": "webpack serve --mode development",
+    "build": "tsc -b && webpack --mode production",
+    "preview": "webpack serve --mode production --port 4173",
+    "typecheck": "tsc -b",
+    "test": "node --import ./tests/register.mjs --test tests/*.test.ts"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "2.13.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-redux": "9.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "css-loader": "7.1.5",
+    "html-webpack-plugin": "5.6.8",
+    "mini-css-extract-plugin": "2.10.2",
+    "ts-loader": "9.6.2",
+    "typescript": "5.9.3",
+    "webpack": "5.112.2",
+    "webpack-cli": "7.2.3",
+    "webpack-dev-server": "6.1.0"
+  }
+}
