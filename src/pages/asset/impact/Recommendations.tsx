@@ -1,4 +1,4 @@
-/** "Recommendations" view (v05 renderAiaRecs): reinforcing recommendations on the left, tradeoffs on the right. */
+/** "Recommendations" view (v09 renderAiaRecs): reinforcing recommendations on the left, interdependencies on the right. */
 import { InfoButton, PolicyPills } from '../../../components/common/Common';
 import { Icon } from '../../../components/common/Icon';
 import { exposures } from '../../../engine/eligibility';
@@ -18,23 +18,19 @@ function exportRecommendations() {
 }
 
 function RecCard({ asset, r, syn }: { asset: Asset; r: Recommendation; syn: Synergy[] }) {
-  // Card wording as drawn in the feedback mock (slide 16); empty owner/timing = not shown on that card.
+  // Card wording as drawn in the feedback mock (slide 16, updated 6 Nov): no owner, timing or rank letter on the cards.
   const card = ref().recommendationCards[r.rank];
   const m = {
-    rank: card?.rank || r.rank, title: card?.title || r.title, copy: card?.copy || r.rationale, policies: card?.policies || r.policies,
-    owner: card ? card.owner : r.owner, timing: card ? card.timing : r.timing, synergy: card?.synergy
+    title: card?.title || r.title, copy: card?.copy || r.rationale, policies: card?.policies || r.policies, synergy: card?.synergy
   };
   const kind = syn.find(x => x.rank === r.rank)?.kind, trade = kind === 'Tradeoff', s = syn.find(x => x.rank === r.rank && x.kind === 'Synergy');
   return (
     <article className={`x-rec ${trade ? 'trade' : ''}`}>
-      <span className="x-rec-rank">{m.rank}</span>
       <div style={{ minWidth: 0 }}>
-        <div className="x-rec-title">{m.title}{trade && <span className="x-pill-trade">Tradeoff</span>}</div>
+        <div className="x-rec-title">{m.title}{trade && <span className="x-pill-trade">Interdependencies</span>}</div>
         <p className="x-rec-copy">{m.copy}</p>
         <div className="x-rec-meta">
           <PolicyPills items={m.policies} />
-          {m.owner && <span className="pill"><Icon name="users" size={11} /> Owner: {m.owner}</span>}
-          {m.timing && <span className="pill"><Icon name="clock" size={11} /> {m.timing}</span>}
         </div>
         {s && <div className="x-rec-syn"><span className="x-pill-syn">Synergy</span><span>{m.synergy || s.text}</span></div>}
         {trade && (
@@ -78,7 +74,7 @@ export function Recommendations({ asset }: { asset: Asset }) {
           {left.length ? left.map(r => <RecCard key={r.rank} asset={asset} r={r} syn={syn} />) : <div className="empty-state">—</div>}
         </div>
         <div>
-          <div className="x-recs-head"><span className="x-pill-trade">Tradeoff</span>{right.length} recommendation{right.length === 1 ? ' that creates' : 's that create'} tradeoffs between policies</div>
+          <div className="x-recs-head"><span className="x-pill-trade">Interdependencies</span>{right.length} recommendation{right.length === 1 ? '' : 's'} with interdependencies between policies</div>
           {right.length ? right.map(r => <RecCard key={r.rank} asset={asset} r={r} syn={syn} />) : <div className="small muted">—</div>}
         </div>
       </div>

@@ -21,7 +21,6 @@ export interface UiState {
   aiaMode: 'asset' | 'new';
 
   overviewSearch: string;
-  overviewArea: string;
   overviewPolicy: string;
   overviewStatus: string;
   overviewRisk: string;
@@ -40,7 +39,7 @@ export interface UiState {
 
 /** Text filters that can be set with the generic `filterChanged` action. */
 export type FilterKey =
-  | 'overviewSearch' | 'overviewArea' | 'overviewPolicy' | 'overviewStatus' | 'overviewRisk' | 'overviewGeography' | 'overviewStage' | 'overviewOwner'
+  | 'overviewSearch' | 'overviewPolicy' | 'overviewStatus' | 'overviewRisk' | 'overviewGeography' | 'overviewStage' | 'overviewOwner'
   | 'userSearch' | 'userRoleFilter' | 'userAssetFilter';
 
 /** assessment slice: assets with their assessment workspace, the new-product draft and asset inputs. */
@@ -78,7 +77,6 @@ export const initialUi = (): UiState => ({
   selectedAssetId: 'TAK-481',
   aiaMode: 'asset',
   overviewSearch: '',
-  overviewArea: 'All areas',
   overviewPolicy: 'All policies',
   overviewStatus: 'All statuses',
   overviewRisk: 'All risks',

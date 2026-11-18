@@ -13,7 +13,6 @@ import { UsersPage } from '../../pages/settings/UsersPage';
 import type { AppState } from '../../store/appState';
 import { useAppState } from '../../store/store';
 import type { Role } from '../../types/domain';
-import { toast } from '../../ui/overlay';
 import { Icon } from '../common/Icon';
 import { openTour } from '../tour/Tour';
 
@@ -91,7 +90,7 @@ function Topbar() {
       <div className="top-actions">
         <select className="asset-select" id="assetSelect" aria-label="Selected asset" value={selected} onChange={e => selectAssetFromHeader(e.target.value)}>
           <option value="portfolio">Assets overview</option>
-          {assets.map(a => <option key={a.id} value={a.id}>{a.assetCode} · {a.therapeuticArea}</option>)}
+          {assets.map(a => <option key={a.id} value={a.id}>{a.assetCode}</option>)}
         </select>
         {isMock() && ( /* demo role preview; in API mode the server-assigned role applies */
           <label className="role-control">
@@ -103,7 +102,6 @@ function Topbar() {
         )}
         <span className="bundle-pill" id="bundlePill"><i />{newDocs ? `${newDocs} new policy documents · ${refreshed}` : `No new policy documents · ${refreshed}`}</span>
         <button className="tour-button" id="tourButton" onClick={() => openTour()}><Icon name="tour" size={15} />Take a Tour</button>
-        <button className="icon-button" id="notificationButton" aria-label="Notifications" title="Notifications" onClick={() => toast('No new notifications for Asset X.')}><Icon name="bell" /></button>
         <button className="tour-button" id="signOutButton" style={{ color: 'var(--ink)', borderColor: 'var(--line)' }} onClick={() => { void signOut(); }}>Sign out</button>
         <UserChip name={s.session?.name || 'Signed-in user'} role={s.role} />
       </div>

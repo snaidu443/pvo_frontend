@@ -17,7 +17,7 @@ function ValueYearBody({ s, asset, m }: { s: Ctx; asset: Asset; m: ValueModel })
   return (
     <>
       <p className="x-desc" style={{ margin: '-4px 0 8px' }}>
-        Net revenue and revenue at risk by policy, each year ($M) — {v.scenario && v.scenario !== 'Base' ? `${v.scenario.toLowerCase()} scenario` : 'base case'} lifetime {fmtB(m.net)}
+        Net revenue and revenue impact by policy, each year ($M) — {v.scenario && v.scenario !== 'Base' ? `${v.scenario.toLowerCase()} scenario` : 'base case'} lifetime {fmtB(m.net)}
       </p>
       <YearLegend rows={rows} />
       <YearChart rows={rows} />
@@ -54,7 +54,7 @@ export function ValueImpact({ asset }: { asset: Asset }) {
         </section>
         <section className="x-card">
           <h2>
-            Net revenue by year, policy by policy <InfoButton label="Net revenue by year" text="Net revenue and revenue at risk by policy, each year." />{' '}
+            Net revenue by year, policy by policy <InfoButton label="Net revenue by year" text="Net revenue and revenue impact by policy, each year." />{' '}
             <span className="x-tags"><span className="x-tag">ILLUSTRATIVE</span></span>
           </h2>
           <ValueYearBody s={s} asset={asset} m={m} />

@@ -8,6 +8,7 @@
  */
 import { activityService, assetService, documentService, inputsService } from '../api';
 import { nowStamp, todayLabel } from '../engine/format';
+import { createSaveQueue } from './saveQueue';
 import { userLabel } from '../engine/permissions';
 import type { AppState } from '../store/appState';
 import { DRAFT_ID } from '../store/slices/assessmentSlice';
@@ -42,12 +43,31 @@ export function record(event: string) {
   activityService.record(entry).catch(() => { /* audit trail is best effort in the demo */ });
 }
 
+/**
+ * Saves started and still running, so a refresh from the server never overwrites a newer local edit (see refreshAsset).
+ * Asset saves go through a queue: one at a time per asset, each sending the latest state (see saveQueue.ts).
+ */
+let saveCount = 0, savesRunning = 0;
+const assetSaves = createSaveQueue(
+  id => { const cur = getState().assets.find(x => x.id === id); return cur ? assetService.update(cur) : Promise.resolve(); },
+  fail('The asset could not be saved.')
+);
+export const saveActivity = () => ({ started: saveCount, running: savesRunning + assetSaves.active });
+function tracked<T>(p: Promise<T>): Promise<T> {
+  saveCount++; savesRunning++;
+  return p.finally(() => { savesRunning--; });
+}
+
 /** Write the asset (with its workspace) through to the service. Drafts are not saved until created. */
 export function saveAsset(id: string) {
   const a = getState().assets.find(x => x.id === id);
   if (!a || isDraft(a)) return;
-  assetService.update(a).catch(fail('The asset could not be saved.'));
+  saveCount++;
+  assetSaves.request(id);
 }
+
+/** Resolves when the asset's saves have finished: true if the last one succeeded (a failure has already been reported). */
+export const assetSaved = (id: string): Promise<boolean> => assetSaves.settled(id);
 
 export function saveSubject() {
   const a = subjectOf(getState());
@@ -71,5 +91,5 @@ export function saveQuestion(questionId: string) {
 
 export function saveDocument(docId: number) {
   const d = getState().documents.find(x => x.id === docId);
-  if (d && d.assetId !== DRAFT_ID) documentService.update(d).catch(fail('Document details could not be saved.'));
+  if (d && d.assetId !== DRAFT_ID) tracked(documentService.update(d)).catch(fail('Document details could not be saved.'));
 }

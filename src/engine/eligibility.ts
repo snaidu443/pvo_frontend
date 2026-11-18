@@ -27,31 +27,31 @@ export interface Profile {
   negotiation: number | null;
   tclass: string;
   name: string;
-  area: string;
 }
 
 export function profile(s: Ctx, a: Asset): Profile {
   const st = aia(a).setup, inds = st.indications.filter(i => i.include !== false), firstIdx = Math.max(0, st.indications.findIndex(i => i.include !== false)), c = a.context || {};
-  // Catalogue inputs (Data Submission / Indications) win over the legacy extracted fields.
-  const iv = indValues(inds[0]), cov = str(iv.coverage);
+  // Catalogue inputs (Data Submission / Indications / Inputs) win over the legacy extracted fields.
+  const iv = indValues(inds[0]), mode = str(aia(a).v6?.asset.modeAdmin);
   const modality = str(aia(a).v6?.asset.modality) || fieldVal(s, a, 'Modality') || st.modality;
-  const partField = cov ? (/D/.test(cov) && !/B/.test(cov) ? 'Part D' : 'Part B') : fieldVal(s, a, 'Medicare coverage');
+  const partField = mode ? (/Part D/.test(mode) ? 'Part D' : 'Part B') : fieldVal(s, a, 'Medicare coverage');
   const part = partField || (st.route.includes('Part D') ? 'Part D' : 'Part B');
   const routeWord = st.route.split(' · ')[0] || 'Oral', routeLabel = routeWord === 'Oral' ? 'oral' : routeWord;
   const launchUS = num(fieldVal(s, a, 'US launch year', 'Indication ' + (firstIdx + 1))) ?? num(inds[0]?.launchUS);
   const launchEU = num(fieldVal(s, a, 'EU launch year', 'Indication ' + (firstIdx + 1))) ?? num(inds[0]?.launchEU);
   const spend = num(fieldVal(s, a, 'Assumed annual Medicare spend')) ?? (c.medicareSpend || 0);
-  const generic = num(fieldVal(s, a, 'Expected generic entry year')) ?? (aia(a).created ? null : (launchUS || 2028) + 7);
+  const generic = num(aia(a).v6?.asset.generic) ?? num(fieldVal(s, a, 'Expected generic entry year')) ?? (aia(a).created ? null : (launchUS || 2028) + 7);
   const maaField = assetFields(s, a).find(f => f.field === 'EU MAA year');
   const maaEntered = !!(maaField && maaField.value && maaField.source === 'You entered');
   let maa = maaField && maaField.value ? num(maaField.value) : launchEU ? launchEU + 1 : null;
-  // "EU MAA Submission Timing" (Indications) overrides the year when it contradicts it.
-  if (iv.maa === 'Not pursuing') maa = null;
-  else if (iv.maa === 'December 2026-December 2028' && !(maa != null && maa >= 2026 && maa <= 2028)) maa = 2027;
-  else if (iv.maa === 'January 2029 and beyond' && !(maa != null && maa >= 2029)) maa = 2029;
+  // "EU MAA Submission Timing" (Indications) wins over the year derived from the launch.
+  {
+    const sub = iv.maaSub && typeof iv.maaSub === 'object' && 'y' in iv.maaSub ? num(iv.maaSub.y) : null;
+    if (sub) maa = sub;
+  }
   const bio = !!modality && !/small molecule/i.test(modality);
   const negotiation = launchUS ? launchUS + (bio ? 10 : 6) : null;
-  return { inds, modality, part, routeLabel, launchUS, launchEU, spend, generic, maa, maaEntered, bio, negotiation, tclass: str(iv.tclass) || fieldVal(s, a, 'Therapeutic class') || st.tclass, name: displayName(a), area: st.area || '' };
+  return { inds, modality, part, routeLabel, launchUS, launchEU, spend, generic, maa, maaEntered, bio, negotiation, tclass: str(iv.tclass) || fieldVal(s, a, 'Therapeutic class') || st.tclass, name: displayName(a) };
 }
 
 export type Trigger = [string, boolean];
@@ -59,7 +59,7 @@ export type Trigger = [string, boolean];
 export function jcaTriggers(p: Profile, i: number): Trigger[] {
   const ind: Partial<Indication> = p.inds[i] || {}, eu = num(ind.launchEU) ?? p.launchEU;
   return [
-    ['New oncology active substance', i === 0 && (indValues(p.inds[i]).cancer === 'Yes' || /antineoplastic/i.test(p.tclass) || /onc/i.test(p.area))],
+    ['New oncology active substance', i === 0 && (indValues(p.inds[i]).cancer === 'Yes' || /antineoplastic/i.test(p.tclass))],
     ['Advanced therapy (ATMP)', /cell|gene|cgt/i.test(p.modality)],
     ['Orphan medicine (from 2028)', ind.orphanEU === 'Yes' && (eu || 0) >= 2028],
     ['Any new substance (from 2030)', i === 0 && (eu || 0) >= 2030],
@@ -69,12 +69,12 @@ export function jcaTriggers(p: Profile, i: number): Trigger[] {
 
 export type StepState = 'pass' | 'fail' | 'grey';
 export interface Step { label: string; value: string; state: StepState }
-export interface PolicyResult { steps: Step[]; verdict: 'pass' | 'fail' | 'pending'; chip: string; tier?: 'full' | 'partial' | null }
+export interface PolicyResult { steps: Step[]; verdict: 'pass' | 'fail' | 'pending'; chip: string; tier?: 'full' | 'partial' | null; /** Out of scope only because of the Launch Markets input. */ launchOut?: boolean }
 export interface EligibilityResult {
   IRA: PolicyResult;
   MFN: PolicyResult;
   'EU-GPL': PolicyResult;
-  JCA: { triggers: Trigger[][]; verdict: 'pass' | 'fail' | 'pending'; chip: string; firstInd: number };
+  JCA: { triggers: Trigger[][]; verdict: 'pass' | 'fail' | 'pending'; chip: string; firstInd: number; launchOut?: boolean };
 }
 
 export function evaluate(s: Ctx, a: Asset): EligibilityResult {
@@ -94,7 +94,7 @@ export function evaluate(s: Ctx, a: Asset): EligibilityResult {
     ['Coverage / model', `${p.part} → ${D ? 'GUARD' : 'GLOBE'}`, true],
     [`Spend >$${thr}M ${p.part}`, `$${p.spend}M`, p.spend > thr],
     THERAPEUTIC_CLASSES.includes(p.tclass)
-      ? ['Therapeutic class', `${p.tclass}${p.tclass === 'None of the following' ? '' : ' (covered class)'}`, p.tclass !== 'None of the following']
+      ? ['Therapeutic class', `${p.tclass}${['None of the following', 'Unknown'].includes(p.tclass) ? '' : ' (covered class)'}`, p.tclass !== 'None of the following']
       : ['Therapeutic class', tq ? `In covered class: ${tq.answer}` : p.tclass, !tq || tq.answer !== 'No'],
     ['Not CGT / plasma', p.modality, !/cell|gene|cgt|plasma/i.test(p.modality)]
   ];
@@ -142,6 +142,11 @@ export function evaluate(s: Ctx, a: Asset): EligibilityResult {
     else { jv = 'pending'; jchip = st || 'Pending'; }
   }
   res.JCA = { triggers: inds, verdict: jv, chip: jchip, firstInd: hit >= 0 ? hit : 0 };
+  // Launch Markets (Data Submission): a US-only launch takes JCA and EU-GPL out of scope; an EU-only launch takes IRA and MFN out.
+  // The option texts are the database's ("US", "EU", "Global launch (including US and EU)"); the older "US only launch" / "EU only launch" still match.
+  const usOnly = /^US( only|$)/.test(str(aia(a).v6?.asset.launchMarkets)), euOnly = /^EU( only|$)/.test(str(aia(a).v6?.asset.launchMarkets));
+  const off: PolicyCode[] = usOnly ? ['JCA', 'EU-GPL'] : euOnly ? ['IRA', 'MFN'] : [];
+  if (!legacy) off.forEach(c => { res[c].verdict = 'fail'; res[c].chip = usOnly ? 'US-only launch' : 'EU-only launch'; res[c].launchOut = true; });
   return res;
 }
 

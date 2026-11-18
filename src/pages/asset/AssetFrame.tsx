@@ -5,18 +5,25 @@ import { goTab, setGovView, startNewAsset } from '../../actions/navigation';
 import { Icon } from '../../components/common/Icon';
 import { ASSET_SUB_PAGES } from '../../engine/constants';
 import { canEdit } from '../../engine/permissions';
-import { inputsGated, isTabOpen, missingInputs, type InputTab } from '../../engine/inputs';
+import { inputsGated, isTabOpen, missingInputs, openConflicts, tabOfInput, type InputTab } from '../../engine/inputs';
 import { displayName } from '../../engine/workspace';
 import { useAppState } from '../../store/store';
 import type { Asset } from '../../types/domain';
+import { ExtractionMini } from './submission/ExtractionMini';
 
 function AddProductButton() {
   const { role } = useAppState();
   if (!canEdit(role)) return null;
-  return <button className="button primary" onClick={startNewAsset}><Icon name="plus" /> Add New Product</button>;
+  // The small progress bar for the CI / Protocol extraction sits right under the button.
+  return (
+    <div className="x-addcol">
+      <button className="button primary" onClick={startNewAsset}><Icon name="plus" /> Add New Product</button>
+      <ExtractionMini />
+    </div>
+  );
 }
 
-/** v03 aiaHeading: eyebrow with the asset, title, optional description, "Add New Product". */
+/** v03 aiaHeading: eyebrow with the asset, title and optional description. */
 export function AiaHeading({ asset, title, description }: { asset: Asset; title: ReactNode; description?: ReactNode }) {
   const { aiaMode, role } = useAppState();
   const eyebrow = aiaMode === 'new' ? displayName(asset) || 'Asset Impact Analysis' : `${asset.assetCode} · ${asset.assetName}`;
@@ -34,7 +41,7 @@ export function AiaHeading({ asset, title, description }: { asset: Asset; title:
   );
 }
 
-/** v03 pageHeading as used on asset pages (with icon and extra actions after "Add New Product"). */
+/** v03 pageHeading as used on asset pages (with icon and extra actions). */
 export function AssetPageHeading({ asset, title, description, actions, icon }: { asset: Asset; title: ReactNode; description?: ReactNode; actions?: ReactNode; icon?: string }) {
   return (
     <div className="page-heading">
@@ -85,6 +92,7 @@ export function AssetSubNav({ asset }: { asset: Asset }) {
         </div>
       )}
       <MissingInputsBanner asset={asset} />
+      {assetSubPage === 'governance' && <ConflictsBanner asset={asset} />}
     </>
   );
 }
@@ -99,24 +107,45 @@ function goToInput(tab: InputTab) {
   if (tab === 'fields') setGovFilter('Required missing');
 }
 
-/** Lists missing required inputs; Eligibility, Impact and Scenario Analysis stay locked until they are entered (v07 v6MissingBanner). */
+/**
+ * Lists missing required inputs; Eligibility, Impact and Scenario Analysis stay locked until they are entered (v07 v6MissingBanner).
+ * On the Data Submission page only the inputs entered on that page are listed: the Indications, Inputs and Key Assumptions
+ * items are filled on their own tabs (after extraction), so listing them here is noise.
+ */
 function MissingInputsBanner({ asset }: { asset: Asset }) {
   const s = useAppState();
   if (!inputsGated(asset) || asset.id === '__draft') return null;
-  const m = missingInputs(s, asset);
+  const all = missingInputs(s, asset);
+  const m = s.assetSubPage === 'submission' ? all.filter(r => r.tab === 'submission') : all;
   if (!m.length) return null;
   return (
     <div className="banner warning x-reqbanner" style={{ marginBottom: 12 }}>
       <Icon name="alert" />
       <div>
         <strong>{m.length} required input{m.length === 1 ? '' : 's'} missing.</strong> Eligibility, Impact and Scenario Analysis stay locked until they are entered.{' '}
-        <span className="x-reqlist">
-          {m.map(r => (
-            <button key={`${r.it.k}|${r.ind?.id ?? ''}`} className="link-button small" onClick={() => goToInput(r.tab)}>
-              {r.it.label}{r.ind ? ` · ${r.ind.name}` : ''} <span className="muted">({TAB_LABEL[r.tab]})</span>
-            </button>
-          ))}
-        </span>
+        <button className="link-button small" onClick={() => goToInput(m[0].tab)}>
+          Go to first missing input <span className="muted">({TAB_LABEL[m[0].tab]})</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/** Conflicting document values wait for review on Inputs and Assumptions; they never block the assessment. */
+function ConflictsBanner({ asset }: { asset: Asset }) {
+  const s = useAppState();
+  if (asset.id === '__draft') return null;
+  const list = openConflicts(s, asset);
+  if (!list.length) return null;
+  const WHERE: Record<InputTab, string> = { submission: 'Data Submission', indications: 'Indications', fields: 'Inputs', judgment: 'Assumptions' };
+  return (
+    <div className="banner x-cfbanner" style={{ marginBottom: 12 }}>
+      <Icon name="alert" />
+      <div>
+        <strong>{list.length} conflicting value{list.length === 1 ? '' : 's'} found in the documents.</strong> The first value is used until you review it.{' '}
+        <button className="link-button small" onClick={() => goToInput(tabOfInput(list[0].it))}>
+          Review first conflict <span className="muted">({WHERE[tabOfInput(list[0].it)]})</span>
+        </button>
       </div>
     </div>
   );

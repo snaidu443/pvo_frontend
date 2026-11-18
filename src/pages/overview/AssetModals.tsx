@@ -1,7 +1,6 @@
 /** Modals opened from the Assets overview row actions. */
 import { useState, type FormEvent } from 'react';
-import { addCollaborator, deleteAsset, saveEditedAsset, startAssessment } from '../../actions/portfolio';
-import { ASSET_AREAS } from '../../engine/constants';
+import { addCollaborator, saveEditedAsset, startAssessment } from '../../actions/portfolio';
 import { canEdit, canManage, canSeeUsers, isEditableAsset, visibleAssets } from '../../engine/permissions';
 import { lastAssessmentDate } from '../../engine/workspace';
 import { getState } from '../../store/store';
@@ -97,7 +96,7 @@ function EditAssetForm({ asset }: { asset: Asset }) {
   const owners = [...new Set([asset.owner, ...s.users.filter(u => u.status === 'active').map(u => u.name)])];
   const [form, setForm] = useState({
     assetName: asset.assetName.startsWith(asset.assetCode + ' ') ? asset.assetName.slice(asset.assetCode.length + 1) : asset.assetName,
-    therapeuticArea: asset.therapeuticArea, owner: asset.owner
+    owner: asset.owner
   });
   const opt = (list: string[]) => list.map(x => <option key={x}>{x}</option>);
   return (
@@ -106,9 +105,6 @@ function EditAssetForm({ asset }: { asset: Asset }) {
         <label className="form-field"><span className="field-label">Asset code</span><input className="input" value={asset.assetCode} disabled /></label>
         <label className="form-field"><span className="field-label">Asset name</span>
           <input className="input" required maxLength={80} value={form.assetName} onChange={e => setForm({ ...form, assetName: e.target.value })} />
-        </label>
-        <label className="form-field"><span className="field-label">Therapeutic area</span>
-          <select className="select" value={form.therapeuticArea} onChange={e => setForm({ ...form, therapeuticArea: e.target.value })}>{opt(ASSET_AREAS)}</select>
         </label>
         <label className="form-field"><span className="field-label">Submission owner</span>
           <select className="select" value={form.owner} onChange={e => setForm({ ...form, owner: e.target.value })}>{opt(owners)}</select>
@@ -129,13 +125,3 @@ export function openEditAssetModal(id: string) {
   });
 }
 
-export function confirmDeleteAsset(id: string) {
-  const s = getState(), asset = s.assets.find(a => a.id === id);
-  if (!asset || !isEditableAsset(s, asset)) { toast('Only added assets can be deleted, by Admin or Editor.'); return; }
-  openModal({
-    title: 'Delete Asset',
-    small: true,
-    body: <p className="small" style={{ lineHeight: 1.65 }}>Delete <strong>{asset.assetCode}</strong> and its documents and starter records? This cannot be undone.</p>,
-    footer: <><button className="button" onClick={closeModal}>Cancel</button><button className="button primary" onClick={() => deleteAsset(asset.id)}>Delete asset</button></>
-  });
-}

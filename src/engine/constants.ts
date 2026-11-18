@@ -36,14 +36,13 @@ export const AIA_ORDER: AiaTab[] = ASSET_SUB_PAGES.map(x => x[0]);
 export const MODALITIES = ['Small molecule', 'Large molecule', 'Biologic', 'Cell therapy', 'Gene therapy'];
 export const ROUTES = ['Oral · Part D', 'IV · Part B', 'SC · Part B', 'Oral · Part B', 'IV · Part D'];
 export const TCLASSES = ['Antineoplastic', 'Immunomodulator', 'Hematologic', 'Neurologic', 'Endocrine'];
-export const ASSET_AREAS = ['Oncology', 'Rare hematology', 'Immunology', 'Cell therapy', 'Neuroscience', 'Metabolic disease', 'Other'];
 
 export const DOC_TYPES = ['CI', 'Protocol', 'CDP', 'Forecast'];
 export const DOC_LABELS: Record<string, string> = { CI: 'Competitive Intelligence', Protocol: 'Trial Protocol Concept Sheet', CDP: 'Clinical Development Plan (CDP)', Forecast: 'Forecast Assumptions' };
 /** [type, label, example, formats, accept] */
 export const DOC_SLOTS: [string, string, string, string, string][] = [
   ['CI', 'Competitive Intelligence', 'CI_Quarterly_Update.pdf', 'PDF, PowerPoint', '.pdf,.ppt,.pptx'],
-  ['Protocol', 'Trial Protocol Concept Sheet', 'Protocol_Concept_Sheet.docx', 'PDF, Word', '.pdf,.doc,.docx'],
+  ['Protocol', 'Trial Protocol Concept Sheet', 'Protocol_Concept_Sheet.pdf', 'PDF recommended (a Word file needs Microsoft Word on the server)', '.pdf,.doc,.docx'],
   ['CDP', 'Clinical Development Plan (CDP)', 'CDP_FY27-29.pptx', 'PDF, Word, PowerPoint', '.pdf,.doc,.docx,.ppt,.pptx'],
   ['Forecast', 'Forecast Assumptions', 'Forecast_v3.xlsx or Forecast.pptx', 'Excel or PowerPoint (format to be confirmed)', '.xls,.xlsx,.xlsm,.csv,.ppt,.pptx']
 ];

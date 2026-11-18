@@ -38,14 +38,14 @@
       "flags": ""
     },
     {
-      "question": "What is TEST-100's revenue at risk under IRA?",
+      "question": "What is TEST-100's revenue impact under IRA?",
       "answer": "About -$187M over the 15-year window (2029-2043), or roughly 7% of the $2.71B gross value. MFN is the larger effect for TEST-100 at -$276M; JCA and EU-GPL revenue impact is not modelled.\nMain driver: from the year the negotiated price takes effect (2038), revenue falls by 15% a year due to MFP applicability. The IRA price discount (base case 40%, range 25% to 60%) and the Medicare share (70%) scale this effect in Scenario Analysis.\nIllustrative, not a forecast.\nSource: Impact & Recommendations, policy impact for TEST-100.",
-      "pattern": "test-100.*revenue at risk|revenue at risk.*(test-100|under ira)",
+      "pattern": "test-100.*revenue (at risk|impact)|revenue (at risk|impact).*(test-100|under ira)",
       "flags": ""
     },
     {
       "question": "What if TEST-100's Medicare share is 10 points above forecast?",
-      "answer": "Raising the Medicare share from 70% to 80% scales the IRA effect by about 14%. IRA revenue at risk would move from about -$187M to about -$214M (roughly -$27M more).\nEligibility does not change: TEST-100 already exceeds the $200M IRA and $100M Part B MFN spend thresholds.\nIllustrative. Source: Scenario Analysis, Medicare share of patients 70% to 80%.",
+      "answer": "Raising the Medicare share from 70% to 80% scales the IRA effect by about 14%. IRA revenue impact would move from about -$187M to about -$214M (roughly -$27M more).\nEligibility does not change: TEST-100 already exceeds the $200M IRA and $100M Part B MFN spend thresholds.\nIllustrative. Source: Scenario Analysis, Medicare share of patients 70% to 80%.",
       "pattern": "medicare share",
       "flags": ""
     },

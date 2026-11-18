@@ -52,10 +52,10 @@ export const closeDrawer = () => set({ drawer: null });
 
 let toastTimer: ReturnType<typeof setTimeout> | undefined;
 let toastSeq = 0;
-export function toast(message: string) {
+export function toast(message: string, ms = 2800) {
   clearTimeout(toastTimer);
   set({ toast: { id: ++toastSeq, message } });
-  toastTimer = setTimeout(() => set({ toast: null }), 2800);
+  toastTimer = setTimeout(() => set({ toast: null }), ms);
 }
 
 export const isLoaderRunning = () => state.loader !== null;

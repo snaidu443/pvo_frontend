@@ -1,10 +1,8 @@
 /** Overview, asset administration and user-management actions. */
-import { assetService, userService } from '../api';
-import { ASSET_AREAS } from '../engine/constants';
+import { userService } from '../api';
 import { canEdit, canManage, canSeeUsers, isEditableAsset, userLabel, visibleAssets } from '../engine/permissions';
 import type { AppState, FilterKey } from '../store/appState';
-import { assetDeleted } from '../store/sharedActions';
-import { assetAccessChanged, userSaved, userUpdated } from '../store/slices/adminSlice';
+import { assetAccessChanged, userReplaced, userSaved, usersReplaced, userUpdated } from '../store/slices/adminSlice';
 import { assessmentStarted, assetEdited } from '../store/slices/assessmentSlice';
 import { filterChanged } from '../store/slices/uiSlice';
 import { dispatch, getState } from '../store/store';
@@ -29,9 +27,18 @@ const success = (message: string) =>
 
 const canAccess = (s: AppState, id: string) => visibleAssets(s).some(a => a.id === id);
 const userById = (id: number) => getState().users.find(u => u.id === id);
-const saveUser = (id: number, isNew = false) => {
+/** The screen shows a change at once; if the server refuses it, say why and show the server's list again (undo). */
+const undoUsers = (fallback: string) => (e: unknown) => {
+  fail(fallback)(e);
+  userService.list().then(list => dispatch(usersReplaced(list))).catch(() => { /* signed out or unreachable: the message above says so */ });
+};
+/** Save a user on the server. A new user got a temporary id here; the server's saved copy (with its own id) replaces it. */
+const saveUser = (id: number, isNew = false, done?: () => void) => {
   const u = userById(id);
-  if (u) (isNew ? userService.create(u) : userService.update(u)).catch(fail('The user could not be saved.'));
+  if (!u) return;
+  (isNew ? userService.create(u) : userService.update(u))
+    .then(saved => { dispatch(userReplaced({ tempId: id, user: saved })); done?.(); })
+    .catch(undoUsers('The user could not be saved.'));
 };
 
 /* ---------------- assessments ---------------- */
@@ -81,34 +88,23 @@ export function addCollaborator(assetId: string, input: CollaboratorInput) {
 
 /* ---------------- edit / delete added assets ---------------- */
 
-export interface AssetEditInput { assetName: string; therapeuticArea: string; owner: string }
+export interface AssetEditInput { assetName: string; owner: string }
 
 export function saveEditedAsset(assetId: string, input: AssetEditInput) {
   const st = getState(), asset = st.assets.find(a => a.id === assetId);
   if (!asset || !isEditableAsset(st, asset)) return;
   const name = input.assetName.trim().slice(0, 80);
   if (!name) { toast('Asset name is required.'); return; }
-  if (!ASSET_AREAS.includes(input.therapeuticArea) || !input.owner) return;
+  if (!input.owner) return;
   if (input.owner !== asset.owner) {
     dispatch(assetAccessChanged({ assetId, changes: [{ userName: asset.owner, add: false }, { userName: input.owner, add: true }] }));
     [asset.owner, input.owner].forEach(n => { const u = getState().users.find(x => x.name === n); if (u) saveUser(u.id); });
   }
-  dispatch(assetEdited({ assetId, name, therapeuticArea: input.therapeuticArea, owner: input.owner }));
+  dispatch(assetEdited({ assetId, name, owner: input.owner }));
   saveAsset(assetId);
   record(`Edited asset ${asset.assetCode}`);
   closeModal();
   success('Asset updated successfully.');
-}
-
-export function deleteAsset(assetId: string) {
-  const st = getState(), asset = st.assets.find(a => a.id === assetId);
-  if (!asset || !isEditableAsset(st, asset)) return;
-  const remaining = visibleAssets({ ...st, assets: st.assets.filter(a => a.id !== assetId) });
-  dispatch(assetDeleted({ id: assetId, nextSelectedId: remaining[0]?.id || '' }));
-  assetService.remove(assetId).catch(fail('The asset could not be deleted.'));
-  record(`Deleted asset ${asset.assetCode}`);
-  closeModal();
-  success(`Asset ${asset.assetCode} deleted successfully.`);
 }
 
 /* ---------------- user management (Admin) ---------------- */
@@ -130,10 +126,9 @@ export function saveUserForm(input: UserFormInput) {
   const existing = input.userId ? st.users.find(u => u.id === input.userId) : undefined;
   const user: User = existing ? { ...existing, ...entry } : { ...entry, id: Math.max(0, ...st.users.map(x => x.id)) + 1, permissions: [] };
   dispatch(userSaved(user));
-  saveUser(user.id, !existing);
+  saveUser(user.id, !existing, () => toast(existing ? 'User changes saved.' : 'User added.'));
   record(existing ? `Updated user: ${name}` : input.status === 'pending' ? `Invited user: ${name}` : `Added user: ${name}`);
   closeModal();
-  toast(existing ? 'User changes saved locally.' : 'User added to the local demo.');
 }
 
 export function toggleUserActive(userId: number) {
@@ -141,10 +136,11 @@ export function toggleUserActive(userId: number) {
   const u = userById(userId);
   if (!u) return;
   const active = !u.active;
-  dispatch(userUpdated({ id: userId, patch: { active, status: active ? 'active' : 'inactive', last: 'Just now' } }));
-  saveUser(userId);
+  dispatch(userUpdated({ id: userId, patch: { active, status: active ? 'active' : 'inactive' } }));
+  userService.setStatus(userId, active ? 'active' : 'inactive')
+    .then(saved => { dispatch(userSaved(saved)); toast(`${u.name} ${active ? 'activated' : 'deactivated'}.`); })
+    .catch(undoUsers('The user status could not be changed.'));
   record(`${active ? 'Activated' : 'Deactivated'} user ${u.name}`);
-  toast(`${u.name} ${active ? 'activated' : 'deactivated'}.`);
 }
 
 export function resendInvite(userId: number) {

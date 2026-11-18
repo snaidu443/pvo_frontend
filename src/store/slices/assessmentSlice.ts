@@ -4,14 +4,15 @@
  * Reducers are pure: ids, dates and the acting user arrive in the payload.
  */
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { isMock } from '../../config/env';
 import { evaluate } from '../../engine/eligibility';
 import { INPUT_ITEM, INPUT_ITEMS } from '../../engine/inputCatalogue';
-import { autoExtractInputs, writeInput, type RowValue } from '../../engine/inputs';
+import { resolveConflict, settleConflict, writeExtra, writeInput, type RowValue } from '../../engine/inputs';
 import { ref } from '../../engine/reference';
 import { syncAssetSummary } from '../../engine/summary';
 import {
   assetFields, assetQuestions, baseAia, docTypes, ensureAia, ensureAssessments, ensureIndIds, ensureIndicationFields, fieldVal, generateFields,
-  isUnlocked, newSetup, prepIndications, sampleIndications, seedPerInd, setFieldValue, starterQuestions, summarizeAnswers, syncIndicationFields, unlock
+  isUnlocked, newSetup, prepIndications, seedPerInd, setFieldValue, starterQuestions, summarizeAnswers, syncIndicationFields, unlock
 } from '../../engine/workspace';
 import { num } from '../../engine/format';
 import type { Asset, AssessmentRecord, AssessmentSetup, AssessmentWorkspace, ExtractionJob, Indication, SavedScenario, SourceDocument } from '../../types/domain';
@@ -37,7 +38,7 @@ function prepare(state: AssessmentState, a: Asset) {
 
 function makeDraft(): Asset {
   return {
-    id: DRAFT_ID, assetCode: '', assetName: '', therapeuticArea: '', stage: '', jurisdictions: [], policyExposures: [],
+    id: DRAFT_ID, assetCode: '', assetName: '', stage: '', jurisdictions: [], policyExposures: [],
     submissionStatus: '', submissionCompleteness: 0, eligibilityStatus: '', businessContextStatus: '', impactStatus: '', owner: '',
     lastUpdatedAt: '', estimatedImpactLevel: '', estimatedAtRisk: 0, estimatedOpportunity: 0, recommendationStatus: '', governanceAlerts: 0,
     summaryMetrics: { gross: 0, net: 0, usRevenue: 0, euRevenue: 0 }, eligibility: {}, context: {},
@@ -74,6 +75,29 @@ const assessmentSlice = createSlice({
       ensureAia(state, a);
       prepare(state, a);
     },
+    /**
+     * API mode: the server's fresh copy of one asset and its documents. What structx.sqlite owns (details, indications, catalogue
+     * values, documents) is replaced; what only the browser holds (view state, scenarios, revenue, assessments) stays.
+     */
+    assetRefreshed(state, { payload }: PayloadAction<{ asset: Asset; documents: SourceDocument[] }>) {
+      const { asset: fresh, documents } = payload, cur = state.assets.find(x => x.id === fresh.id);
+      if (!cur) return;
+      state.documents = state.documents.filter(d => d.assetId !== fresh.id).concat(documents);
+      Object.assign(cur, {
+        assetCode: fresh.assetCode, assetName: fresh.assetName, stage: fresh.stage,
+        jurisdictions: fresh.jurisdictions, owner: fresh.owner, lastUpdatedAt: fresh.lastUpdatedAt, submissionStatus: fresh.submissionStatus,
+        submissionCompleteness: fresh.submissionCompleteness, workflowStatus: fresh.workflowStatus, context: { ...cur.context, ...fresh.context }
+      });
+      if (!fresh.aia) return;
+      const server = baseAia(fresh.aia);
+      if (cur.aia) {
+        cur.aia.setup = server.setup;
+        cur.aia.v6 = server.v6;
+        cur.aia.created = server.created;
+        cur.aia.unlocked = [...new Set([...cur.aia.unlocked, ...server.unlocked])];
+      } else cur.aia = server;
+      prepare(state, cur);
+    },
     subjectPrepared(state, action: PayloadAction<string>) {
       const a = subject(state, action.payload);
       if (a) prepare(state, a);
@@ -82,7 +106,7 @@ const assessmentSlice = createSlice({
       const a = subject(state, payload.assetId);
       if (a?.aia) Object.assign(a.aia, payload.patch);
     },
-    setupChanged(state, { payload }: PayloadAction<{ assetId: string; key: keyof Pick<AssessmentSetup, 'name' | 'area' | 'stage' | 'modality' | 'route'>; value: string; today: string }>) {
+    setupChanged(state, { payload }: PayloadAction<{ assetId: string; key: keyof Pick<AssessmentSetup, 'name' | 'stage' | 'modality' | 'route'>; value: string; today: string }>) {
       const a = subject(state, payload.assetId);
       if (!a?.aia) return;
       a.aia.setup[payload.key] = payload.value;
@@ -142,20 +166,32 @@ const assessmentSlice = createSlice({
     indicationFieldsEnsured(state, action: PayloadAction<{ assetId: string }>) {
       const a = subject(state, action.payload.assetId);
       if (!a?.aia) return;
-      ensureIndicationFields(state, a);
+      // API mode: structx.sqlite has no starter fields, so nothing is generated; the Inputs tab shows the saved catalogue values.
+      if (isMock() || a.id === DRAFT_ID) ensureIndicationFields(state, a);
       a.aia.govView = 'fields';
     },
 
     /* ----- consolidated input catalogue ----- */
     /** Set one catalogue input (asset, indication or competitor level). The action validates the value first. */
-    inputChanged(state, { payload }: PayloadAction<{ assetId: string; key: string; indId?: string; compIndex?: number; value: RowValue; who: string; stamp: string; today: string }>) {
+    inputChanged(state, { payload }: PayloadAction<{ assetId: string; key: string; indId?: string; compIndex?: number; value: RowValue; extra?: boolean; who: string; stamp: string; today: string }>) {
       const a = subject(state, payload.assetId), w = a?.aia;
       if (!a || !w) return;
       const it = payload.compIndex != null ? INPUT_ITEMS.find(x => x.lvl === 'comp' && x.k === payload.key) : INPUT_ITEM[payload.key];
       if (!it) return;
       const ind = payload.indId ? w.setup.indications.find(i => i.id === payload.indId) : undefined;
       const comp = payload.compIndex != null ? w.v6?.comp[payload.compIndex] : undefined;
-      writeInput(state, a, it, { ind, comp }, payload.value, payload.who, payload.stamp);
+      if (payload.extra) writeExtra(it, ind, payload.value as string | number);
+      else writeInput(state, a, it, { ind, comp }, payload.value, payload.who, payload.stamp);
+      settleConflict(a, it, ind);
+      sync(state, payload.assetId, payload.today);
+    },
+    /** Resolve a conflict between document values: use one of them (index) or enter the value manually. */
+    conflictChosen(state, { payload }: PayloadAction<{ assetId: string; key: string; indId?: string; choice: number | 'manual'; who: string; stamp: string; today: string }>) {
+      const a = subject(state, payload.assetId), w = a?.aia, it = INPUT_ITEM[payload.key];
+      if (!a || !w || !it) return;
+      const ind = payload.indId ? w.setup.indications.find(i => i.id === payload.indId) : undefined;
+      if (it.lvl === 'ind' && !ind) return;
+      resolveConflict(state, a, it, ind, payload.choice, payload.who, payload.stamp);
       sync(state, payload.assetId, payload.today);
     },
 
@@ -197,10 +233,10 @@ const assessmentSlice = createSlice({
       list.unshift(rec);
       a.lastUpdatedAt = payload.today;
     },
-    assetEdited(state, { payload }: PayloadAction<{ assetId: string; name: string; therapeuticArea: string; owner: string }>) {
+    assetEdited(state, { payload }: PayloadAction<{ assetId: string; name: string; owner: string }>) {
       const a = state.assets.find(x => x.id === payload.assetId);
       if (!a) return;
-      Object.assign(a, { assetName: `${a.assetCode} ${payload.name}`, therapeuticArea: payload.therapeuticArea, owner: payload.owner });
+      Object.assign(a, { assetName: `${a.assetCode} ${payload.name}`, owner: payload.owner });
     }
   },
   extraReducers: builder => {
@@ -212,7 +248,13 @@ const assessmentSlice = createSlice({
         state.questions = data.questions;
         state.extractionJobs = {};
         state.draft = null;
-        state.assets.forEach(a => { ensureAia(state, a); ensureAssessments(a); });
+        state.assets.forEach(a => {
+          // API mode: the server sends the saved part of the workspace (set-up, indications, catalogue values from
+          // structx.sqlite). Fill in the view state and defaults here; ensureAia then leaves it as it is.
+          if (a.aia) a.aia = baseAia(a.aia);
+          ensureAia(state, a);
+          ensureAssessments(a);
+        });
         syncAssetSummary(state, state.assets.find(a => a.id === 'TEST-100'), today);
       })
       .addCase(newAssetStarted, state => {
@@ -223,17 +265,15 @@ const assessmentSlice = createSlice({
         const d = state.draft;
         if (!d?.aia) return;
         const st = d.aia.setup;
-        // Demo extraction: sample indications only when a CDP was uploaded (orphan status is entered by the user).
-        const cdp = state.documents.some(doc => doc.assetId === DRAFT_ID && docTypes(doc).includes('CDP'));
-        if (!st.indications.length && cdp) { st.indications = sampleIndications().map(i => ({ ...i, orphanUS: '', orphanEU: '' })); ensureIndIds(st); }
+        // No sample indications or made-up values here: the indications and inputs come from the AI extraction of the uploaded files.
         const name = st.name.trim(), ind1 = (st.indications[0]?.name || '').trim();
         const asset: Asset = {
-          id: payload.id, assetCode: name, assetName: ind1 ? `${name} ${ind1}` : name, therapeuticArea: st.area || 'Other', stage: st.stage,
+          id: payload.id, assetCode: name, assetName: ind1 ? `${name} ${ind1}` : name, stage: st.stage,
           jurisdictions: [], policyExposures: [], submissionStatus: 'In progress', submissionCompleteness: 0, eligibilityStatus: 'Review pending',
           businessContextStatus: 'Draft', impactStatus: '—', owner: payload.owner, lastUpdatedAt: payload.today, estimatedImpactLevel: '—',
           estimatedAtRisk: 0, estimatedOpportunity: 0, recommendationStatus: '—', governanceAlerts: 0, summaryMetrics: { gross: 0, net: 0, usRevenue: 0, euRevenue: 0 },
           eligibility: Object.fromEntries(ref().policies.map(p => [p.code, 'Review pending'])),
-          context: { modality: st.modality, coverage: st.route, medicareSpend: undefined, priority: 'Maximize value', sequence: 'US-first', appetite: 'Medium', marketArchetype: st.area || '', patientShare: '70%' },
+          context: { modality: st.modality, coverage: st.route, medicareSpend: undefined, priority: 'Maximize value', sequence: 'US-first', appetite: 'Medium', patientShare: '70%' },
           policyImpact: { IRA: 0, MFN: 0, JCA: 0, 'EU-GPL': 0 }, recommendationCount: 0, approvalCount: 0, createdByRole: payload.role,
           aia: { ...d.aia, created: true }
         };
@@ -244,7 +284,6 @@ const assessmentSlice = createSlice({
         state.fields.push(...generateFields(asset, { legacy: true, spend: forecast ? 205 : '', prevSpend: '', generic: forecast ? 2034 : '', maa: '' }));
         state.questions.push(...starterQuestions(asset.id));
         const created = state.assets[state.assets.length - 1];
-        autoExtractInputs(state, created);
         unlock(created, 'governance');
         created.aia!.govView = 'indications';
         syncAssetSummary(state, created, payload.today);
@@ -263,7 +302,6 @@ const assessmentSlice = createSlice({
         if (payload.tab === 'governance') {
           // "Extract data with AI" on an existing created asset that has not been assessed yet.
           if (a.aia.created && !isUnlocked(a, 'eligibility')) regenerateFields(state, a);
-          autoExtractInputs(state, a);
           unlock(a, 'governance');
           a.aia.govView = 'indications';
         } else if (payload.tab === 'eligibility') {
@@ -285,8 +323,8 @@ const assessmentSlice = createSlice({
 });
 
 export const {
-  assetPrepared, subjectPrepared, viewChanged, setupChanged, documentsAdded, documentUpdated, documentRemoved, documentSynced, extractionJobUpdated,
-  indicationAdded, indicationIncluded, indicationUpdated, indicationFieldsEnsured, inputChanged, fieldEdited, revenueEdited, questionAnswered, scenarioSaved,
+  assetPrepared, assetRefreshed, subjectPrepared, viewChanged, setupChanged, documentsAdded, documentUpdated, documentRemoved, documentSynced, extractionJobUpdated,
+  indicationAdded, indicationIncluded, indicationUpdated, indicationFieldsEnsured, inputChanged, conflictChosen, fieldEdited, revenueEdited, questionAnswered, scenarioSaved,
   assessmentStarted, assetEdited
 } = assessmentSlice.actions;
 export default assessmentSlice.reducer;

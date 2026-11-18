@@ -1,13 +1,14 @@
-import { authService, referenceService, setUnauthorizedHandler, workspaceService } from '../api';
+import { authService, lookupService, referenceService, setUnauthorizedHandler, workspaceService } from '../api';
 import { todayLabel } from '../engine/format';
 import { canManage, canSeeUsers, visibleAssets } from '../engine/permissions';
+import { setLookups } from '../engine/lookups';
 import { setReference } from '../engine/reference';
+import { clearDraftFiles } from './documents';
 import { disclaimerAccepted, roleSwitched, signedOut, workspaceLoaded } from '../store/sharedActions';
 import { loginFailed, loginStarted } from '../store/slices/sessionSlice';
 import { dispatch, getState } from '../store/store';
 import type { Role } from '../types/domain';
 import { closeDrawer, closeModal, toast } from '../ui/overlay';
-import { clearDraftFiles, stopWatching } from './submission';
 
 /**
  * Sign in, load reference + workspace data, then show the disclaimer.
@@ -18,8 +19,9 @@ export async function signIn(name: string, password: string, role: Role): Promis
   const session = await authService.login(name, password, role);
   dispatch(loginStarted(session));
   try {
-    const [reference, data] = await Promise.all([referenceService.get(), workspaceService.load()]);
+    const [reference, data, lookups] = await Promise.all([referenceService.get(), workspaceService.load(), lookupService.get()]);
     setReference(reference);
+    setLookups(lookups);
     dispatch(workspaceLoaded({ data, today: todayLabel() }));
   } catch (e) {
     dispatch(loginFailed());
@@ -36,10 +38,9 @@ export function acceptDisclaimer() {
 }
 
 export async function signOut() {
+  clearDraftFiles();
   closeModal();
   closeDrawer();
-  stopWatching();
-  clearDraftFiles();
   await authService.logout();
   dispatch(signedOut());
 }

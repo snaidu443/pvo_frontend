@@ -3,93 +3,35 @@
  * Each validates against current state, dispatches an assessment-slice action and
  * writes through to the services.
  */
-import { ALLOWED_EXTENSIONS, MAX_UPLOAD_BYTES, assessmentService, assetService, documentService, inputsService } from '../api';
-import { isMock } from '../config/env';
-import { ANALYSIS_STEPS, DOC_TYPES, ELIGIBILITY_STEPS, EXTRACT_STEPS } from '../engine/constants';
+import { assessmentService, assetService, inputsService } from '../api';
+import { ANALYSIS_STEPS, DOC_TYPES, ELIGIBILITY_STEPS } from '../engine/constants';
 import { MONTHS, revenueSeries, scenarioCompute, SCN_MAX, SCN_VARS, scnRowsOf, type ScnKey } from '../engine/impact';
 import { canEdit, canEditAiaInputs, canEditGoverned, userLabel } from '../engine/permissions';
 import { num } from '../engine/format';
 import { INPUT_ITEM, INPUT_ITEMS, str } from '../engine/inputCatalogue';
-import { inputsGated, missingInputs, readInput, type RowValue } from '../engine/inputs';
-import { docTypes, guessDocType, isUnlocked } from '../engine/workspace';
+import { inputsGated, missingBeforeView, missingInputs, readInput, viewBlockedByIndications, type RowValue } from '../engine/inputs';
+import { docTypes, isUnlocked } from '../engine/workspace';
 import { assetCreated, workflowAdvanced } from '../store/sharedActions';
 import {
-  DRAFT_ID, documentRemoved, documentSynced, documentUpdated, documentsAdded, extractionJobUpdated, fieldEdited, indicationAdded, indicationFieldsEnsured, inputChanged,
+  DRAFT_ID, documentUpdated, fieldEdited, indicationAdded, indicationFieldsEnsured, inputChanged, conflictChosen,
   indicationIncluded, indicationUpdated, questionAnswered, revenueEdited, scenarioSaved, setupChanged, viewChanged, type WorkspaceViewPatch
 } from '../store/slices/assessmentSlice';
 import { dispatch, getState } from '../store/store';
-import type { Indication, PolicyCode, SourceDocument } from '../types/domain';
-import { closeDrawer, confirmAction, isLoaderRunning, runLoader, toast } from '../ui/overlay';
-import { fail, isDraft, now, record, saveAsset, saveDocument, saveField, saveFieldsFor, saveQuestion, saveSubject, subjectId, subjectOf } from './core';
+import type { Indication, PolicyCode } from '../types/domain';
+import { closeDrawer, isLoaderRunning, runLoader, toast } from '../ui/overlay';
+import { assetSaved, fail, isDraft, now, record, saveAsset, saveDocument, saveField, saveFieldsFor, saveQuestion, saveSubject, subjectId, subjectOf } from './core';
+import { uploadDraftFiles } from './documents';
+import { extractAfterCreate } from './extraction';
 import { goTab } from './navigation';
-import { clearDraftFiles, dropDraftFile, keepDraftFile, sendSubmission, slotFor, slotProblem, submissionProblem, watchExtraction } from './submission';
 
 const toTop = () => window.scrollTo(0, 0);
 const patchView = (patch: WorkspaceViewPatch) => dispatch(viewChanged({ assetId: subjectId(getState()), patch }));
-const docId = () => Date.now() + Math.round(Math.random() * 1e6); // display-only record id; the API assigns the real one
 
 /* ======================= Data Submission ======================= */
 
-export function updateSetup(key: 'name' | 'area', value: string) {
-  dispatch(setupChanged({ assetId: subjectId(getState()), key, value: key === 'name' ? value.slice(0, 80) : value, today: now().today }));
+export function updateSetup(key: 'name', value: string) {
+  dispatch(setupChanged({ assetId: subjectId(getState()), key, value: value.slice(0, 80), today: now().today }));
   saveSubject();
-}
-
-export interface UploadOptions { competitor?: boolean; forcedType?: string }
-
-/**
- * Add files as document records. Mock mode: name and size only; the browser never reads the contents.
- * API mode: files for a new product wait in memory until "Extract data with AI"; files for an existing
- * asset upload at once. Each file must fit its slot's formats (the server checks again).
- */
-export function addFiles(files: FileList | File[], opts: UploadOptions = {}) {
-  const st = getState(), a = subjectOf(st);
-  if (st.page !== 'assetAnalysis' || !a) return;
-  const { stamp, today } = now(), api = !isMock();
-  const accepted: { record: SourceDocument; file: File }[] = [];
-  let tooBig = 0, problem: string | null = null;
-  [...files].forEach(file => {
-    const ext = (file.name.split('.').pop() || '').toLowerCase();
-    let type = opts.competitor ? 'Competitor data' : opts.forcedType || guessDocType(file.name);
-    if (api) {
-      const slot = opts.forcedType || slotFor(file, type);
-      const why = slot ? slotProblem(file, slot) : `${file.name}: accepted formats are PDF, Word, PowerPoint and Excel (xls, xlsx).`;
-      if (why) { problem ??= why; return; }
-      type = slot!;
-    } else {
-      if (!(ALLOWED_EXTENSIONS as readonly string[]).includes(ext)) return;
-      if (file.size > MAX_UPLOAD_BYTES) { tooBig++; return; }
-    }
-    accepted.push({
-      file,
-      record: {
-        id: docId(), assetId: a.id, name: file.name.slice(0, 200), size: `${(file.size / 1024 / 1024).toFixed(1)} MB`,
-        type, scope: 'Program-wide', version: 'Latest', tag: '',
-        competitor: !!opts.competitor, pages: api ? '—' : 'Demo upload', added: 'Just now', addedStamp: stamp
-      }
-    });
-  });
-  if (!accepted.length) {
-    toast(problem || (tooBig ? `Files must be ${MAX_UPLOAD_BYTES / 1024 / 1024} MB or smaller.` : 'Accepted: PDF, Word, Excel (xlsx, xlsm), PowerPoint'));
-    return;
-  }
-  const n = accepted.length;
-  dispatch(documentsAdded({ assetId: a.id, docs: accepted.map(x => x.record), today }));
-  record(`Added ${n} source document${n === 1 ? '' : 's'}`);
-  if (api && isDraft(a)) {
-    accepted.forEach(({ record: r, file }) => keepDraftFile(r.id, file));
-    toast(problem ? `${n} added. ${problem}` : `${n} file${n === 1 ? '' : 's'} ready. They upload when you click Extract data with AI.`);
-    return;
-  }
-  if (!isDraft(a)) {
-    accepted.forEach(({ record: r, file }) => {
-      documentService.add(r, file).then(saved => {
-        if (saved.id !== r.id) dispatch(documentSynced({ localId: r.id, saved }));
-      }).catch(fail(`${r.name} could not be uploaded.`));
-    });
-    saveSubject();
-  }
-  toast(`${n} file${n === 1 ? '' : 's'} added to the local demo.`);
 }
 
 /** Tick or untick a document label. Returns false when the change is rejected (last label). */
@@ -108,89 +50,37 @@ export function setDocumentLabel(id: number, type: string, checked: boolean): bo
   return true;
 }
 
-export function removeDocument(id: number) {
-  confirmAction('Remove source document', 'Remove this file from the local assessment? This will not delete a file from your device.', 'Remove', () => {
-    const st = getState(), doc = st.documents.find(d => d.id === id);
-    dispatch(documentRemoved({ assetId: subjectId(st), id, today: now().today }));
-    record('Removed source document');
-    if (doc && doc.assetId === DRAFT_ID) dropDraftFile(id);
-    if (doc && doc.assetId !== DRAFT_ID) documentService.remove(id).catch(fail('The document could not be removed.'));
-    toast(isMock() ? 'Document removed from this demo.' : 'Document removed.');
-  });
-}
-
-/** Next free NEW-nnn id for an added product. */
-function nextAssetId(): string {
-  const s = getState();
-  let n = s.assets.filter(x => x.aia?.created).length + 1, id = `NEW-${String(n).padStart(3, '0')}`;
-  while (s.assets.some(x => x.id === id)) id = `NEW-${String(++n).padStart(3, '0')}`;
-  return id;
-}
-
-/** "Extract data with AI". Creates the asset when adding a new product. Returns 'name-required' for form validation. */
-export async function extractData(): Promise<'ok' | 'name-required' | 'blocked'> {
+/**
+ * "Create asset" on a new product: adds the asset to structx.sqlite (POST /assets), then saves what was entered on the form
+ * (PUT /assets/{code}). Documents and AI extraction come from the AI team's pipeline, not from here. Returns 'name-required' for form validation.
+ */
+export async function createAsset(): Promise<'ok' | 'name-required' | 'blocked'> {
   const st = getState(), a = subjectOf(st);
-  if (!a?.aia) return 'blocked';
+  if (!a?.aia || !isDraft(a)) return 'blocked';
+  if (!canEditAiaInputs(st.role)) { toast('Only Admin and Editor roles can add a product.'); return 'blocked'; }
   const name = a.aia.setup.name.trim();
   if (!name) return 'name-required';
-  if (isDraft(a) && st.assets.some(x => x.assetCode.toLowerCase() === name.toLowerCase())) {
-    toast('An asset with this code already exists.');
-    return 'blocked';
-  }
+  if (st.assets.some(x => x.assetCode.toLowerCase() === name.toLowerCase())) { toast('An asset with this name already exists.'); return 'blocked'; }
   if (isLoaderRunning()) return 'blocked';
-  const wasDraft = isDraft(a);
-  if (wasDraft && !isMock()) return submitNewProduct();
-  if (!wasDraft) inputsService.extract(a.id).catch(fail('Extraction could not be started.'));
-  await runLoader('Extracting data with AI…', EXTRACT_STEPS);
-
-  const { today } = now(), s = getState();
-  if (wasDraft) {
-    const id = nextAssetId(), ind1 = (s.draft?.aia?.setup.indications[0]?.name || '').trim();
-    dispatch(assetCreated({ id, code: name, assetName: ind1 ? `${name} ${ind1}` : name, owner: s.session?.name || userLabel(s), role: s.role, today }));
-    const after = getState(), asset = after.assets.find(x => x.id === id)!;
-    record(`Created asset ${asset.assetCode}`);
-    assetService.create({
-      asset, fields: after.fields.filter(f => f.assetId === id), questions: after.questions.filter(q => q.assetId === id), trace: after.decisionTraces[id]
-    }).then(() => {
-      // Documents can only be saved once the asset exists on the server.
-      after.documents.filter(d => d.assetId === id).forEach(d => documentService.add(d).then(saved => {
-        if (saved.id !== d.id) dispatch(documentSynced({ localId: d.id, saved }));
-      }).catch(fail(`${d.name} could not be saved.`)));
-    }).catch(fail('The new asset could not be saved.'));
-    toast(`${asset.assetCode} has been added to the portfolio.`);
-  } else {
-    dispatch(workflowAdvanced({ assetId: a.id, tab: 'governance', who: userLabel(s), today }));
-    saveAsset(a.id);
-    saveFieldsFor(a.id);
+  try {
+    await assetService.create(name);
+  } catch (e) {
+    fail('The new asset could not be created. Please try again.')(e);
+    return 'blocked'; // nothing was created; the form is kept
   }
+  const { today } = now(), s = getState();
+  dispatch(assetCreated({ id: name, code: name, assetName: name, owner: s.session?.name || userLabel(s), role: s.role, today }));
+  record(`Created asset ${name}`);
+  saveAsset(name); // the set-up entered on the form
   toTop();
-  return 'ok';
-}
-
-/**
- * API mode, new product: one request with the set-up fields and every file. The server creates the asset,
- * documents and extraction job in one transaction; the workspace built here is then saved onto that asset.
- */
-async function submitNewProduct(): Promise<'ok' | 'blocked'> {
-  const problem = submissionProblem();
-  if (problem) { toast(problem); return 'blocked'; }
-  const [sent] = await Promise.all([sendSubmission(), runLoader('Uploading documents and extracting data…', EXTRACT_STEPS)]);
-  if (!sent.ok) { toast(sent.message); return 'blocked'; } // nothing was created; the form and files are kept
-
-  const s = getState(), setup = s.draft!.aia!.setup, name = setup.name.trim(), ind1 = (setup.indications[0]?.name || '').trim(), { today } = now();
-  const id = sent.assetId;
-  dispatch(assetCreated({ id, code: name, assetName: ind1 ? `${name} ${ind1}` : name, owner: s.session?.name || userLabel(s), role: s.role, today }));
-  sent.saved.forEach(x => dispatch(documentSynced({ localId: x.localId, saved: x.doc })));
-  clearDraftFiles();
-  const after = getState(), asset = after.assets.find(x => x.id === id)!;
-  record(`Created asset ${asset.assetCode}`);
-  saveAsset(id); // the workspace (aia) and summary built in the browser
-  saveFieldsFor(id);
-  inputsService.replaceQuestions(id, after.questions.filter(q => q.assetId === id)).catch(fail('Assumptions could not be saved.'));
-  dispatch(extractionJobUpdated({ jobId: sent.jobId, assetId: id, status: 'queued', error: null, fieldsFound: 0, createdAt: null, startedAt: null, finishedAt: null }));
-  watchExtraction(id, sent.jobId);
-  toast(`${asset.assetCode} has been added to the portfolio.`);
-  toTop();
+  const draftDocs = s.documents.filter(d => d.assetId === DRAFT_ID);
+  const files = await uploadDraftFiles(name, draftDocs.map(d => d.id));
+  const saved = await assetSaved(name);
+  toast(!saved ? `${name} was created, but the set-up could not be saved. Please try again.`
+    : files.failed.length ? `${name} was created. ${files.failed[0]}${files.failed.length > 1 ? ` (and ${files.failed.length - 1} more)` : ''}`
+    : `${name} was created and saved.`);
+  // The indications and inputs come from the AI: start the extraction once everything is uploaded and saved.
+  if (saved && !files.failed.length && draftDocs.some(d => ['CDP', 'CI', 'Protocol'].includes(docTypes(d)[0]))) extractAfterCreate(name);
   return 'ok';
 }
 
@@ -238,12 +128,15 @@ export function goToFields() {
   const st = getState(), a = subjectOf(st);
   if (!a?.aia) return;
   if (!a.aia.setup.indications.some(i => i.include !== false)) { toast('Include at least one indication to continue.'); return; }
+  if (viewBlockedByIndications(st, a, 'fields')) { toast(`Enter the ${missingBeforeView(st, a, 'fields').length} required indication inputs first.`); return; }
   dispatch(indicationFieldsEnsured({ assetId: subjectId(st) }));
   saveFieldsFor(subjectId(st));
   toTop();
 }
 
 export function goToJudgment() {
+  const st = getState(), a = subjectOf(st);
+  if (a?.aia && viewBlockedByIndications(st, a, 'judgment')) { toast(`Enter the ${missingBeforeView(st, a, 'judgment').length} required inputs first.`); return; }
   patchView({ govView: 'judgment' });
   toTop();
 }
@@ -258,12 +151,22 @@ export type InputEdit =
   | { kind: 'value'; raw: string }
   | { kind: 'toggle'; option: string; checked: boolean }
   | { kind: 'year'; index: number; raw: string; country?: string }
-  | { kind: 'ym'; part: 'y' | 'm'; raw: string };
+  | { kind: 'ym'; part: 'y' | 'm'; raw: string }
+  | { kind: 'extra'; raw: string };
 
 /** Inputs entered on Data Submission may be edited by every role (as in v07); the rest need Admin or Editor. */
-const SUBMISSION_INPUTS = ['modality', 'jcaInsights', 'regStrategy', 'euAccess'];
+const SUBMISSION_INPUTS = ['modality', 'launchMarkets'];
 
-function nextValue(cur: RowValue, it: { type: string; opts?: string[] }, edit: InputEdit): RowValue | undefined {
+function nextValue(cur: RowValue, it: { type: string; opts?: string[]; extra?: { type: 'num' | 'text' } }, edit: InputEdit): RowValue | undefined {
+  if (edit.kind === 'extra') {
+    const raw = edit.raw.trim();
+    if (it.extra?.type === 'num') {
+      const n = num(raw);
+      if (raw && (n == null || n < 0 || n > 30)) { toast('Enter a number of countries (0-30).'); return undefined; }
+      return raw === '' ? '' : n;
+    }
+    return it.extra ? raw.slice(0, 200) : undefined;
+  }
   if (edit.kind === 'toggle') {
     if (!it.opts?.includes(edit.option)) return undefined;
     const set = new Set(Array.isArray(cur) ? cur.map(String) : []);
@@ -323,19 +226,32 @@ export function setInput(target: InputTarget, edit: InputEdit): boolean {
   const val = nextValue(readInput(st, a, it, ind, comp), it, edit);
   if (val === undefined) return false;
   const { stamp, today } = now(), id = subjectId(st);
-  dispatch(inputChanged({ assetId: id, ...target, value: val, who: userLabel(st), stamp, today }));
+  dispatch(inputChanged({ assetId: id, ...target, value: val, extra: edit.kind === 'extra', who: userLabel(st), stamp, today }));
   record(`Updated ${it.label}`);
   saveSubject();
   if (it.field || ['usLaunch', 'euLaunch', 'fdaOdd', 'emaOd'].includes(it.k)) saveFieldsFor(id);
   return true;
 }
 
-/** Clicking the selected Key Assumptions answer clears it; any other answer selects it. */
-export function toggleAnswer(target: InputTarget, option: string) {
+/** Resolve a conflict between document values: use one of them (index) or enter the value manually. */
+export function chooseConflict(target: InputTarget, choice: number | 'manual') {
   const st = getState(), a = subjectOf(st), it = INPUT_ITEM[target.key];
   if (!a?.aia || !it) return;
+  if (!canEditGoverned(st.role)) { toast('View only for your role'); return; }
+  const { stamp, today } = now(), id = subjectId(st);
+  dispatch(conflictChosen({ assetId: id, key: target.key, indId: target.indId, choice, who: userLabel(st), stamp, today }));
+  record(choice === 'manual' ? `Conflict on ${it.label}: entered manually` : `Conflict on ${it.label}: used a document value`);
+  saveSubject();
+  if (it.field || ['usLaunch', 'euLaunch', 'fdaOdd', 'emaOd'].includes(it.k)) saveFieldsFor(id);
+}
+
+/** Clicking the selected Key Assumptions answer clears it; any other answer selects it. */
+export function toggleAnswer(target: InputTarget, option: string) {
+  const st = getState(), a = subjectOf(st), it = target.compIndex != null ? INPUT_ITEMS.find(x => x.lvl === 'comp' && x.k === target.key) : INPUT_ITEM[target.key];
+  if (!a?.aia || !it) return;
   const ind = target.indId ? a.aia.setup.indications.find(i => i.id === target.indId) : undefined;
-  setInput(target, { kind: 'value', raw: str(readInput(st, a, it, ind)) === option ? '' : option });
+  const comp = target.compIndex != null ? a.aia.v6?.comp[target.compIndex] : undefined;
+  setInput(target, { kind: 'value', raw: str(readInput(st, a, it, ind, comp)) === option ? '' : option });
 }
 
 /** Edit a governed value. Returns true when handled (the input keeps the stored value otherwise). */
@@ -402,13 +318,16 @@ export function answerQuestion(questionId: string, value: string, indId?: string
   saveQuestion(questionId);
 }
 
-/** "Confirm & run assessment" → unlocks Eligibility. */
+/** "Confirm & run assessment" → unlocks Eligibility. Says what happened: missing inputs, a failed save, or success once the data is saved. */
 export async function runAssessment() {
   const st = getState(), a = subjectOf(st);
   if (!a || isLoaderRunning()) return;
+  if (!canEditAiaInputs(st.role)) { toast('Only Admin and Editor roles can run the assessment.'); return; }
   const missing = inputsGated(a) ? missingInputs(st, a) : [];
   if (missing.length) {
-    toast(`Cannot run the assessment: ${missing.length} required input${missing.length === 1 ? '' : 's'} missing (${missing.map(r => r.it.label + (r.ind ? ' · ' + r.ind.name : '')).join('; ')}).`);
+    const names = missing.map(r => r.it.label + (r.ind ? ' · ' + r.ind.name : ''));
+    const shown = names.slice(0, 3).join('; '), more = names.length > 3 ? ` and ${names.length - 3} more` : '';
+    toast(`Cannot run the assessment: ${missing.length} required input${missing.length === 1 ? '' : 's'} missing (${shown}${more}).`);
     toTop();
     return;
   }
@@ -419,6 +338,9 @@ export async function runAssessment() {
   saveSubject();
   inputsService.replaceQuestions(a.id, getState().questions.filter(q => q.assetId === a.id)).catch(fail('Answers could not be saved.'));
   toTop();
+  // Say so only once the data is really saved (a failed save has already shown its own message).
+  if (await assetSaved(a.id)) toast('Assessment confirmed. Your inputs and assumptions were saved.');
+  else toast('Your changes are still on screen but could not be saved. Please try again.');
 }
 
 /* ======================= Eligibility ======================= */

@@ -33,6 +33,14 @@ const adminSlice = createSlice({
       if (i >= 0) state.users[i] = action.payload;
       else state.users.push(action.payload);
     },
+    /** The server's saved copy of a user. A user added here got a temporary id; the server's id replaces it. */
+    userReplaced(state, { payload }: PayloadAction<{ tempId: number; user: User }>) {
+      state.users = state.users.filter(u => u.id !== payload.tempId && u.id !== payload.user.id);
+      state.users.push(payload.user);
+      state.users.sort((a, b) => a.id - b.id);
+    },
+    /** The server's whole user list (used to undo a local change the server refused). */
+    usersReplaced(state, action: PayloadAction<User[]>) { state.users = action.payload; },
     userUpdated(state, { payload }: PayloadAction<{ id: number; patch: Partial<User> }>) {
       const u = state.users.find(x => x.id === payload.id);
       if (u) Object.assign(u, payload.patch);
@@ -69,5 +77,5 @@ const adminSlice = createSlice({
   }
 });
 
-export const { activityRecorded, userSaved, userUpdated, assetAccessChanged } = adminSlice.actions;
+export const { activityRecorded, userSaved, userReplaced, usersReplaced, userUpdated, assetAccessChanged } = adminSlice.actions;
 export default adminSlice.reducer;

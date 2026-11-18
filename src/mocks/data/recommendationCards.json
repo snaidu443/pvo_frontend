@@ -29,8 +29,8 @@
     "policies": [
       "IRA"
     ],
-    "owner": "Clinical",
-    "timing": "Before Phase 3 start"
+    "owner": "",
+    "timing": ""
   },
   "B": {
     "title": "Consider post-launch evidence generation",
@@ -40,18 +40,20 @@
       "MFN",
       "JCA"
     ],
-    "owner": "HEOR",
-    "timing": "At launch"
+    "owner": "",
+    "timing": ""
   },
   "I": {
     "rank": "F",
-    "title": "Consider region-specific launch strategies",
-    "copy": "EU-GPL rewards filing in the EU within 90 days of first global filing, but MFN advises delaying ex-US launch until evidence is robust.",
+    "title": "Consider evidence generation priorities",
+    "copy": "MFN, JCA, and EU-GPL raises the bar for pre-launch evidence requirements, while IRA benefits assets with a faster launch strategy",
     "policies": [
+      "IRA",
+      "MFN",
       "JCA",
       "EU-GPL"
     ],
-    "owner": "Regulatory",
-    "timing": "Before EMA pre-submission"
+    "owner": "",
+    "timing": ""
   }
 }

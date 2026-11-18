@@ -19,6 +19,9 @@ export interface Policy {
   implication: string;
 }
 
+/** Different values for one input found in the documents. The first is used until the user picks one or types their own. */
+export interface InputConflict { state: 'open' | 'resolved' | 'manual'; choice?: number | null; opts: { v: string; src: string }[] }
+
 export interface Indication {
   id?: string;
   name: string;
@@ -31,13 +34,15 @@ export interface Indication {
   source?: string;
   /** Indication-level values of the consolidated input catalogue (engine/inputCatalogue.ts), keyed by input key. */
   v6?: InputValues;
+  /** Conflicting extracted values of this indication, by input key. */
+  conflicts?: Record<string, InputConflict>;
 }
 
 /**
- * A value in the consolidated input catalogue: text or number, a country list,
+ * A value in the input catalogue: text or number, a list of options, a year + month,
  * a Year 1-15 series, or one Year 1-15 series per EU reference country.
  */
-export type InputValue = string | number | string[] | (number | null)[] | Record<string, (number | null)[]> | null | undefined;
+export type InputValue = string | number | string[] | (number | null)[] | Record<string, (number | null)[]> | { y: string; m: string } | null | undefined;
 export type InputValues = Record<string, InputValue>;
 
 /** A competitor product entered on the Inputs tab (competitor-level catalogue inputs). */
@@ -49,7 +54,6 @@ export interface Competitor extends InputValues {
 
 export interface AssessmentSetup {
   name: string;
-  area: string;
   stage: string;
   modality: string;
   route: string;
@@ -96,7 +100,7 @@ export interface AssessmentWorkspace {
   /** Net revenue per year ($M), Years 1-15 from the first US launch, as confirmed on Inputs. */
   revenue?: number[];
   /** Asset-level catalogue inputs and competitors (v06/v07 consolidated input list). */
-  v6?: { asset: InputValues; comp: Competitor[] };
+  v6?: { asset: InputValues; comp: Competitor[]; /** Conflicting extracted values of asset-level inputs, by input key. */ conflicts?: Record<string, InputConflict> };
   // view state
   govView: GovView;
   govFilter: string;
@@ -145,7 +149,6 @@ export interface Asset {
   assetCode: string;
   assetName: string;
   legacyAlias?: string;
-  therapeuticArea: string;
   stage: string;
   jurisdictions: string[];
   policyExposures: PolicyCode[];

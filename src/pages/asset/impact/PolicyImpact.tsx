@@ -72,7 +72,7 @@ function IraConsiderationsTable() {
 function TileBottom({ x, val, on }: { x: Policy; val: number; on: boolean }) {
   if (x.code === 'JCA') return on ? <div className="x-tile-bot"><small>AFFECTED BY ASSET</small></div> : null;
   if (x.code === 'EU-GPL') return <div className="x-tile-bot"><small>TOTAL EU-GPL EXCLUSIVITY PERIOD</small><strong>{on ? '11 Years' : '—'}</strong></div>;
-  return <div className="x-tile-bot"><small>REVENUE AT RISK</small><strong>{on ? fmtM(val) : '$0M'}</strong></div>;
+  return <div className="x-tile-bot"><small>REVENUE IMPACT</small><strong>{on ? fmtM(val) : '$0M'}</strong></div>;
 }
 
 const GPL_PREVIEW = (
@@ -135,7 +135,7 @@ export function PolicyImpact({ asset }: { asset: Asset }) {
         <div className="x-metric"><small>NEGOTIATION <InfoButton label="Negotiation" text="Year the asset may be selected for Medicare negotiation." /></small><strong>{d.negotiation || '—'}</strong></div>
         <div className="x-metric"><small>PRICE EFFECTIVE <InfoButton label="Price effective" text="Year the negotiated price applies." /></small><strong>{eff || '—'}</strong></div>
         <div className="x-metric"><small>FULL-PRICE RUNWAY <InfoButton label="Full-price runway" text="Years at full price before the negotiated price applies." /></small><strong>{runway ? `${runway} yrs` : '—'}</strong></div>
-        <div className="x-metric risk"><small>REVENUE AT RISK <InfoButton label="Revenue at risk" text="Lifetime revenue the policy may remove." /></small><strong>{fmtM(ira)} <span>({pct}%)</span></strong></div>
+        <div className="x-metric risk"><small>REVENUE IMPACT <InfoButton label="Revenue Impact" text="Lifetime revenue the policy may remove." /></small><strong>{fmtM(ira)} <span>({pct}%)</span></strong></div>
       </div>
       <IraTimeline s={s} asset={asset} d={d} />
       <IraYearChart s={s} asset={asset} p={p} ira={ira} d={d} />
@@ -164,7 +164,7 @@ export function PolicyImpact({ asset }: { asset: Asset }) {
         <h2>{pv} — what it means for {name} <span className="x-tags"><span className="x-tag">ILLUSTRATIVE</span></span></h2>
         {pv !== 'JCA' && (
           <div className="x-metrics" style={{ gridTemplateColumns: 'minmax(0,260px)' }}>
-            <div className={`x-metric ${val < 0 ? 'risk' : ''}`}><small>REVENUE AT RISK</small><strong>{fmtM(val)}</strong></div>
+            <div className={`x-metric ${val < 0 ? 'risk' : ''}`}><small>REVENUE IMPACT</small><strong>{fmtM(val)}</strong></div>
           </div>
         )}
         <p className="x-desc" style={{ fontSize: 12, lineHeight: 1.6 }}>{info?.summary}</p>

@@ -1,10 +1,19 @@
 /** Keeps the asset's portfolio summary in line with its assessment. Mutates the asset. */
 import type { Asset } from '../types/domain';
 import { inScope, profile, type Ctx } from './eligibility';
+import { INPUT_PHASES, indValues } from './inputCatalogue';
 import { inputCoverage } from './inputs';
 import { impactFor, recsFor } from './impact';
 import { ref } from './reference';
 import { aia, assetFields, isUnlocked } from './workspace';
+
+/** The set-up stage; when none is set, the most advanced phase of the included indications. */
+function stageOf(a: Asset): string {
+  const st = aia(a).setup;
+  if (st.stage) return st.stage;
+  const at = st.indications.filter(i => i.include !== false).map(i => INPUT_PHASES.indexOf(String(indValues(i).phase ?? ''))).filter(i => i >= 0);
+  return at.length ? INPUT_PHASES[Math.max(...at)] : '';
+}
 
 /** `today` is the display date for lastUpdatedAt (passed in so reducers stay pure). */
 export function syncAssetSummary(s: Ctx, a: Asset | null | undefined, today: string): void {
@@ -22,8 +31,7 @@ export function syncAssetSummary(s: Ctx, a: Asset | null | undefined, today: str
   a.governanceAlerts = nr;
   a.submissionStatus = nr ? 'Needs review' : 'Complete';
   a.lastUpdatedAt = today;
-  a.therapeuticArea = w.setup.area || 'Other';
-  a.stage = w.setup.stage;
+  a.stage = stageOf(a);
   a.context = { ...(a.context || {}), modality: p.modality, coverage: w.setup.route, medicareSpend: p.spend, launchUS: p.launchUS, launchEU: p.launchEU };
   if (isUnlocked(a, 'eligibility')) {
     const exp = inScope(s, a);

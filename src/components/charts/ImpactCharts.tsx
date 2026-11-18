@@ -58,7 +58,7 @@ export function IraYearChart({ s, asset, p, ira, d }: { s: Ctx; asset: Asset; p:
       <div className="x-sub" style={{ marginTop: 0 }}>IRA effect, year by year</div>
       <div className="x-chart-legend">
         <span><i style={{ background: '#1f2f55' }} />Revenue retained</span>
-        <span><i style={{ background: '#e07a5f' }} />IRA revenue at risk (~−${total}M)</span>
+        <span><i style={{ background: '#e07a5f' }} />IRA revenue impact (~−${total}M)</span>
         <span style={{ marginLeft: 'auto' }}>$M per year</span>
       </div>
       <svg className="x-svg" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="IRA effect, year by year">
@@ -73,7 +73,7 @@ export function IraYearChart({ s, asset, p, ira, d }: { s: Ctx; asset: Asset; p:
           return (
             <g key={y}>
               <rect x={x} y={Y(keep)} width={w} height={Math.max(0, Y(0) - Y(keep))} fill="#1f2f55"><title>{`${y}: retained $${Math.round(keep)}M`}</title></rect>
-              {risk ? <rect x={x} y={Y(v)} width={w} height={Math.max(1, Y(keep) - Y(v))} fill="#e07a5f"><title>{`${y}: IRA at risk $${Math.round(risk)}M`}</title></rect> : null}
+              {risk ? <rect x={x} y={Y(v)} width={w} height={Math.max(1, Y(keep) - Y(v))} fill="#e07a5f"><title>{`${y}: IRA revenue impact $${Math.round(risk)}M`}</title></rect> : null}
               <text x={cx(y)} y={H - 8} fontSize="8" textAnchor="middle" fill="#6f7578">{y}</text>
             </g>
           );

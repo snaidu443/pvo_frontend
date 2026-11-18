@@ -18,7 +18,9 @@ import { visibleAssets, canEdit, canManage, canSeeUsers } from '../src/engine/pe
 import { fmtM, fmtB, num } from '../src/engine/format.ts';
 import type { ReferenceData, WorkspaceData, Asset } from '../src/types/domain.ts';
 
-const load = (name: string) => JSON.parse(readFileSync(new URL(`../src/mocks/data/${name}.json`, import.meta.url), 'utf8'));
+// Synthetic asset data lives in tests/fixtures (the app itself reads assets from structx.sqlite only); the rest is the app's catalogue JSON.
+const FIXTURES = ['assets', 'documents', 'decisionTraces'];
+const load = (name: string) => JSON.parse(readFileSync(new URL(`${FIXTURES.includes(name) ? '.' : '../src/mocks'}/${FIXTURES.includes(name) ? 'fixtures' : 'data'}/${name}.json`, import.meta.url), 'utf8'));
 const reference = load('reference');
 setReference({
   ...reference, policies: load('policies'), recommendations: load('recommendations'), tour: load('tour'), copilot: load('copilot'),
@@ -178,9 +180,119 @@ test('PolicyPilot answers from the knowledge base and asset context', () => {
   const s = workspace(), a = get(s, 'TAK-481');
   assert.match(pilotReply(s, null, 'Which Medicare Part B drugs are included in the GLOBE Model?'), /GLOBE Model covers/);
   assert.match(pilotReply(s, null, 'Tell me about JCA'), /^JCA \(EU Joint Clinical Assessment\)/);
-  assert.match(chatReply(s, a, 'who owns these?') || '', /A: Takeda/);
+  // v09: recommendation answers name the card, not an owner or timing
+  assert.equal(chatReply(s, a, 'who owns these?'), null);
+  assert.match(chatReply(s, a, 'recommendation d') || '', /^Optimize indication sequencing: \+\$\d+M at stake\./);
+  assert.match(chatReply(s, a, 'any synergies or trade-offs?') || '', /Interdependency: MFN, JCA, and EU-GPL requires optimized pre-launch evidence.*\(Consider evidence generation priorities\)/);
   assert.match(pilotReply(s, null, 'Is TEST-100 eligible for MFP negotiation, and why?'), /passes all four eligibility criteria/);
   assert.match(pilotReply(s, null, 'Does orphan status protect TEST-100 from MFN exposure?'), /^Orphan status will exclude TEST-100/);
-  assert.match(pilotReply(s, null, "What is TEST-100's revenue at risk under IRA?"), /-\$187M/);
+  assert.match(pilotReply(s, null, "What is TEST-100's revenue impact under IRA?"), /-\$187M/);
+  assert.match(pilotReply(s, null, "What is TEST-100's revenue at risk under IRA?"), /-\$187M/, 'the older wording still finds the answer');
   assert.equal(starterQuestions('X').every(q => q.answer === q.ai), true);
+});
+
+test('set-up dropdown options come from the server lists and can be replaced', async () => {
+  const { setLookups } = await import('../src/engine/lookups.ts');
+  const { INPUT_ITEM, INPUT_MODALITIES } = await import('../src/engine/inputCatalogue.ts');
+  const builtIn = { modalities: [...INPUT_MODALITIES] };
+  try {
+    setLookups({ modalities: ['Small molecule', 'CGT'] });
+    assert.deepEqual(INPUT_ITEM.modality.opts, ['Small molecule', 'CGT'], 'the modality editor and its validation read this list');
+    assert.ok(!INPUT_ITEM.modality.opts!.includes('Biologic (other)'), 'built-in demo options are gone');
+  } finally {
+    setLookups(builtIn); // other tests in this file use the built-in lists
+  }
+  assert.deepEqual(INPUT_ITEM.modality.opts, INPUT_MODALITIES);
+});
+
+test('input catalogue follows the v09 input file: 60 inputs, page locations, conditional requirements', async () => {
+  const { INPUT_ITEMS, INPUT_ITEM } = await import('../src/engine/inputCatalogue.ts');
+  const { inputRows, isMissing, isRequired } = await import('../src/engine/inputs.ts');
+  assert.equal(INPUT_ITEMS.length, 60);
+  assert.deepEqual([...new Set(INPUT_ITEMS.map(i => i.loc))].sort(), ['assumption', 'indications', 'inputs', 'setup']);
+  assert.deepEqual(INPUT_ITEMS.filter(i => i.loc === 'setup').map(i => i.k), ['modality', 'launchMarkets'], 'Data Submission asks only these two');
+  assert.deepEqual(INPUT_ITEMS.filter(i => i.loc === 'indications' && i.lvl === 'ind').map(i => i.k), ['phase', 'usSub', 'maaSub', 'usApp', 'euApp', 'usLaunch', 'euLaunch']);
+
+  const s = workspace(), a = get(s, 'TEST-100'), [i1, i2, i3] = a.aia!.setup.indications;
+  // TEST-100: indication 1 is head-to-head, 2 and 3 are placebo-controlled; indication 3 is Phase II/III and has no US share (only revenue)
+  assert.equal(isRequired(a, INPUT_ITEM.compType, i1), true, 'Head-to-head makes the comparator type required');
+  assert.equal(isRequired(a, INPUT_ITEM.compType, i2), false);
+  assert.equal(isRequired(a, INPUT_ITEM.itc, i2), true, 'an ITC is required when the design is not head-to-head');
+  assert.equal(isRequired(a, INPUT_ITEM.itc, i1), false);
+  assert.equal(isRequired(a, INPUT_ITEM.usRev, i3), true, 'revenue is required when the US market share is not provided');
+  assert.equal(isRequired(a, INPUT_ITEM.usRev, i1), false);
+  assert.equal(isRequired(a, INPUT_ITEM.regStrategy), true, 'a late-stage indication requires the regulatory strategy answer');
+
+  // Year + month inputs count as missing until both parts are given.
+  const maa = () => inputRows(s, a).find(r => r.it.k === 'maaSub' && r.ind === i1)!;
+  assert.equal(isMissing(maa()), false);
+  i1.v6!.maaSub = { y: '2030', m: '' };
+  assert.equal(isMissing(maa()), true);
+});
+
+test('Launch Markets takes policies out of scope: US-only removes JCA and EU-GPL, EU-only removes IRA and MFN', () => {
+  const s = workspace(), a = get(s, 'TEST-100');
+  const base = evaluate(s, a);
+  assert.ok(base.JCA.verdict === 'pass' && base['EU-GPL'].verdict === 'pass' && base.IRA.verdict === 'pass', 'a global launch keeps TEST-100 in all four');
+  a.aia!.v6!.asset.launchMarkets = 'US only launch';
+  let r = evaluate(s, a);
+  assert.deepEqual([r.JCA.verdict, r['EU-GPL'].verdict, r.IRA.verdict, r.MFN.verdict], ['fail', 'fail', 'pass', 'pass']);
+  assert.equal(r.JCA.chip, 'US-only launch');
+  assert.equal(r.JCA.launchOut, true);
+  a.aia!.v6!.asset.launchMarkets = 'EU only launch';
+  r = evaluate(s, a);
+  assert.deepEqual([r.IRA.verdict, r.MFN.verdict, r.JCA.verdict, r['EU-GPL'].verdict], ['fail', 'fail', 'pass', 'pass']);
+  assert.equal(r.IRA.chip, 'EU-only launch');
+  // The database's own option texts ("US", "EU", "Global launch (including US and EU)") work the same way.
+  a.aia!.v6!.asset.launchMarkets = 'US';
+  r = evaluate(s, a);
+  assert.deepEqual([r.JCA.verdict, r['EU-GPL'].verdict, r.IRA.verdict], ['fail', 'fail', 'pass']);
+  a.aia!.v6!.asset.launchMarkets = 'EU';
+  r = evaluate(s, a);
+  assert.deepEqual([r.IRA.verdict, r.MFN.verdict, r.JCA.verdict], ['fail', 'fail', 'pass']);
+  a.aia!.v6!.asset.launchMarkets = 'Global launch (including US and EU)';
+  r = evaluate(s, a);
+  assert.deepEqual([r.IRA.verdict, r.JCA.verdict, r['EU-GPL'].verdict], ['pass', 'pass', 'pass']);
+});
+
+test('server option lists replace the built-in lists of the catalogue selects; keys the server omits keep theirs', async () => {
+  const { setLookups } = await import('../src/engine/lookups.ts');
+  const { INPUT_ITEM, INPUT_ITEMS, INPUT_MODALITIES } = await import('../src/engine/inputCatalogue.ts');
+  const builtIn = INPUT_ITEM.trialDesign.opts!, phase = INPUT_ITEM.phase.opts!, cPhase = INPUT_ITEMS.find(x => x.k === 'cPhase')!.opts!;
+  try {
+    setLookups({
+      modalities: ['Small molecule'],
+      options: { trialDesign: ['Head-to-head', 'Placebo-controlled', 'Single-arm study'], launchMarkets: ['US only launch', 'EU only launch', 'Global launch (including US and EU)'] }
+    });
+    assert.deepEqual(INPUT_ITEM.trialDesign.opts, ['Head-to-head', 'Placebo-controlled', 'Single-arm study'], "the server's spelling is used");
+    assert.equal(INPUT_ITEM.launchMarkets.opts![2], 'Global launch (including US and EU)');
+    assert.deepEqual(INPUT_ITEM.modality.opts, ['Small molecule'], 'modality comes from the modalities list when options has no entry');
+    assert.deepEqual(INPUT_ITEM.phase.opts, phase, 'a key the server does not list keeps the built-in list');
+    assert.deepEqual(INPUT_ITEMS.find(x => x.k === 'cPhase')!.opts, cPhase);
+    // a later call without options goes back to the built-in lists
+    setLookups({ modalities: [...INPUT_MODALITIES] });
+    assert.deepEqual(INPUT_ITEM.trialDesign.opts, builtIn);
+  } finally {
+    setLookups({ modalities: [...INPUT_MODALITIES] });
+  }
+});
+
+test('Overview stage: the set-up stage, else the most advanced phase of the included indications', async () => {
+  const { syncAssetSummary } = await import('../src/engine/summary.ts');
+  const s = workspace(), a = get(s, 'TEST-100'), w = a.aia!;
+  w.created = true;
+  w.setup.stage = 'Phase 2 (set up)';
+  syncAssetSummary(s, a, '12 Nov 2026');
+  assert.equal(a.stage, 'Phase 2 (set up)', 'a stage that was set stays');
+  w.setup.stage = '';
+  const [i1, i2, i3] = w.setup.indications;
+  i1.v6!.phase = 'Phase II'; i2.v6!.phase = 'Phase I'; i3.v6!.phase = 'Phase III'; i3.include = false;
+  syncAssetSummary(s, a, '12 Nov 2026');
+  assert.equal(a.stage, 'Phase II', 'an unticked indication does not count');
+  i3.include = true;
+  syncAssetSummary(s, a, '12 Nov 2026');
+  assert.equal(a.stage, 'Phase III');
+  i1.v6!.phase = ''; i2.v6!.phase = ''; i3.v6!.phase = '';
+  syncAssetSummary(s, a, '12 Nov 2026');
+  assert.equal(a.stage, '', 'nothing to derive it from');
 });

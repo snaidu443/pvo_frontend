@@ -1,44 +1,21 @@
-import { isMock } from '../../config/env';
 import { endpoints } from '../endpoints';
 import { http } from '../httpClient';
-import { db, persist, respond, upsert } from '../mock/mockDb';
-import type { Asset, DecisionTrace, ExtractedField, JudgmentQuestion } from '../../types/domain';
+import type { Asset } from '../../types/domain';
 
-/** Payload for a newly created asset together with its generated starter records. */
-export interface NewAssetPayload {
-  asset: Asset;
-  fields: ExtractedField[];
-  questions: JudgmentQuestion[];
-  trace: DecisionTrace;
-}
-
+/** Assets are read from and saved to structx.sqlite by the API (GET / PUT /assets/{code}). There is no mock copy. */
 export const assetService = {
-  create(payload: NewAssetPayload): Promise<Asset> {
-    if (!isMock()) return http.post<Asset>(endpoints.assets.create, payload);
-    const saved = upsert(db.assets, payload.asset, a => a.id);
-    db.fields.push(...structuredClone(payload.fields));
-    db.questions.push(...structuredClone(payload.questions));
-    db.decisionTraces[payload.asset.id] = structuredClone(payload.trace);
-    persist();
-    return respond(saved);
+  /** One asset, freshly read. */
+  get(id: string): Promise<Asset> {
+    return http.get<Asset>(endpoints.assets.byId(id));
   },
 
-  /** Saves the asset record, including its assessment workspace and assessment history. */
+  /** Adds an empty asset to structx.sqlite (POST /assets). Its set-up and inputs are saved afterwards with update(). */
+  create(code: string): Promise<Asset> {
+    return http.post<Asset>(endpoints.assets.create, { code });
+  },
+
+  /** Saves the asset record, including its assessment workspace. */
   update(asset: Asset): Promise<Asset> {
-    if (!isMock()) return http.put<Asset>(endpoints.assets.byId(asset.id), asset);
-    const saved = upsert(db.assets, asset, a => a.id);
-    persist();
-    return respond(saved);
-  },
-
-  remove(id: string): Promise<void> {
-    if (!isMock()) return http.delete(endpoints.assets.byId(id));
-    db.assets = db.assets.filter(a => a.id !== id);
-    db.fields = db.fields.filter(f => f.assetId !== id);
-    db.questions = db.questions.filter(q => q.assetId !== id);
-    db.documents = db.documents.filter(d => d.assetId !== id);
-    delete db.decisionTraces[id];
-    persist();
-    return respond(undefined);
+    return http.put<Asset>(endpoints.assets.byId(asset.id), asset);
   }
 };

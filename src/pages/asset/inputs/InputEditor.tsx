@@ -3,9 +3,10 @@ import { setInput, type InputTarget } from '../../../actions/assessment';
 import { setGovView } from '../../../actions/navigation';
 import { CommitInput } from '../../../components/common/CommitInput';
 import { Icon } from '../../../components/common/Icon';
+import type { Asset } from '../../../types/domain';
 import { MONTHS } from '../../../engine/impact';
-import { DOC_SOURCES, EU_REFERENCE_COUNTRIES, INPUT_SOURCE_LABEL, indValues, isEmptyValue, str, type InputItem } from '../../../engine/inputCatalogue';
-import { isMissing, type InputRow, type RowValue, type YearMonth } from '../../../engine/inputs';
+import { DOC_SOURCES, EU_REFERENCE_COUNTRIES, INPUT_COND_LABEL, INPUT_SOURCE_LABEL, indValues, isEmptyValue, str, type InputItem } from '../../../engine/inputCatalogue';
+import { hiddenRegion, isMissing, type InputRow, type RowValue, type YearMonth } from '../../../engine/inputs';
 
 type Series = (number | null)[] | undefined;
 
@@ -60,18 +61,27 @@ export function InputEditor({ row, disabled }: { row: Pick<InputRow, 'it' | 'ind
         </select>
       );
     case 'multi': {
-      const list = Array.isArray(v) ? v.map(String) : [];
+      const list = Array.isArray(v) ? v.map(String) : [], x = it.extra, xv = x ? str(indValues(row.ind)[x.key]) : '';
       return (
-        <details className="x-multi">
-          <summary>{list.length ? <b>{list.join(', ')}</b> : 'Select countries…'}</summary>
-          <div className="x-multi-list">
-            {it.opts!.map(o => (
-              <label key={o}>
-                <input type="checkbox" checked={list.includes(o)} disabled={disabled} onChange={e => setInput(target, { kind: 'toggle', option: o, checked: e.target.checked })} /> {o}
-              </label>
-            ))}
-          </div>
-        </details>
+        <>
+          <details className="x-multi">
+            <summary>{list.length ? <b>{list.map(o => (x && o === x.opt && xv ? `${o} (${xv})` : o)).join(', ')}</b> : 'Select…'}</summary>
+            <div className="x-multi-list">
+              {it.opts!.map(o => (
+                <label key={o}>
+                  <input type="checkbox" checked={list.includes(o)} disabled={disabled} onChange={e => setInput(target, { kind: 'toggle', option: o, checked: e.target.checked })} /> {o}
+                </label>
+              ))}
+            </div>
+          </details>
+          {x && list.includes(x.opt) && (
+            <label className="x-extra">
+              <span>{x.label}</span>
+              <CommitInput className="input x-cell" value={xv} disabled={disabled} aria-label={x.label} {...(x.type === 'num' ? { inputMode: 'numeric' as const, maxLength: 2, style: { maxWidth: 70 } } : {})}
+                onCommit={raw => setInput(target, { kind: 'extra', raw })} />
+            </label>
+          )}
+        </>
       );
     }
     case 'ym': {
@@ -126,11 +136,13 @@ export function InputEditor({ row, disabled }: { row: Pick<InputRow, 'it' | 'ind
 }
 
 /** Status chip for an input row. */
-export function InputStatus({ row }: { row: Pick<InputRow, 'it' | 'value'> }) {
+export function InputStatus({ row }: { row: Pick<InputRow, 'it' | 'value' | 'cf'> }) {
   const { it } = row, miss = isMissing(row);
+  if (row.cf?.state === 'open') return <span className="x-stat conflict"><Icon name="alert" size={11} /> Conflict · review</span>;
+  if (row.cf) return <span className="x-stat edited">Resolved</span>;
   if (it.src === 'Calc') {
     if (!miss) return <span className="x-stat">Calculated</span>;
-    return it.calcNote ? <span className="x-stat review">{it.calcNote}</span> : <span className="x-stat missing"><Icon name="info" size={11} /> Insufficient data</span>;
+    return it.calcNote ? <span className="x-stat review">{it.calcNote}</span> : <span className="x-stat review">Not calculated</span>;
   }
   if (miss) return it.req ? <span className="x-stat conflict"><Icon name="alert" size={11} /> Required · missing</span> : <span className="x-stat review">Not provided</span>;
   if (['Manual', 'Link', 'None'].includes(it.src)) return <span className="x-stat edited">Entered by you</span>;
@@ -146,5 +158,25 @@ export function InputSource({ row }: { row: { it: InputItem; value: RowValue } }
   return <span className="x-src">{it.srcNote || INPUT_SOURCE_LABEL[it.src]}</span>;
 }
 
-/** Red asterisk for required inputs. */
-export const Req = ({ it }: { it: InputItem }) => (it.req ? <span className="x-req" title="Required" aria-label="required">*</span> : null);
+/**
+ * Red asterisk for required inputs. A conditional input shows it only while its condition holds (`req`; the tooltip says why),
+ * otherwise a small "conditional" tag.
+ */
+export function Req({ it, req }: { it: InputItem; req?: boolean }) {
+  if (it.req) return <span className="x-req" title="Required" aria-label="required">*</span>;
+  if (!it.cond) return null;
+  if (req) return <span className="x-req" title={INPUT_COND_LABEL[it.cond]} aria-label="required">*</span>;
+  return <span className="x-cond" title={`Conditional: ${INPUT_COND_LABEL[it.cond]}`}>conditional</span>;
+}
+
+/** Note shown when Launch Markets limits the inputs to one region (v10 v6RegionNote). */
+export function RegionNote({ asset }: { asset: Asset }) {
+  const hidden = hiddenRegion(asset);
+  if (!hidden) return null;
+  const shown = hidden === 'US' ? 'EU' : 'US';
+  return (
+    <div className="x-regnote">
+      <Icon name="info" size={13} /> Launch Markets is <b>{shown} only launch</b>: only {shown} and shared inputs are shown and required. {hidden} inputs are hidden; values already entered are kept.
+    </div>
+  );
+}

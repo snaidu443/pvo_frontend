@@ -35,7 +35,7 @@ export function classFrom(area = ''): string {
     : /neuro|cns/i.test(area) ? 'Neurologic' : /metab|endo/i.test(area) ? 'Endocrine' : 'Antineoplastic';
 }
 
-export const newSetup = (): AssessmentSetup => ({ name: '', area: '', stage: '', modality: '', route: '', tclass: '', indications: [] });
+export const newSetup = (): AssessmentSetup => ({ name: '', stage: '', modality: '', route: '', tclass: '', indications: [] });
 
 export const sampleIndications = (): Indication[] => [
   { name: '2L solid tumor', orphanUS: 'No', orphanEU: 'No', launchUS: '2027', launchEU: '2028', include: true, source: 'CDP' },
@@ -160,11 +160,11 @@ export function ensureAia(s: Pick<AppState, 'fields' | 'questions'>, a: Asset): 
   if (!a || a.aia) return a;
   const c = a.context || {}, sample = a.id === 'TAK-481' || a.id === 'TEST-100';
   const indName = a.assetName.replace(`${a.assetCode} `, '');
-  const rare = /rare|orphan/i.test(a.assetName + a.therapeuticArea) ? 'Yes' : 'No';
+  const rare = /rare|orphan/i.test(a.assetName) ? 'Yes' : 'No';
   const setup: AssessmentSetup = {
-    name: a.assetName, area: a.therapeuticArea, stage: a.stage,
+    name: a.assetName, stage: a.stage,
     modality: MODALITIES.includes(String(c.modality)) ? String(c.modality) : 'Small molecule',
-    route: routeFrom(String(c.coverage || '')), tclass: classFrom(a.therapeuticArea),
+    route: routeFrom(String(c.coverage || '')), tclass: classFrom(),
     indications: a.id === 'TEST-100'
       ? [
         { name: '1L myelofibrosis (combination)', orphanUS: 'Yes', orphanEU: 'Yes', launchUS: '2031', launchEU: '2032', include: true, source: 'CDP' },

@@ -17,13 +17,17 @@ export const endpoints = {
     me: '/auth/me'
   },
   reference: '/reference',
+  /** Options for the Therapeutic area and Therapeutic Modality dropdowns (from structx.sqlite). */
+  lookups: '/structx/lookups',
   assets: {
     list: '/assets',
     create: '/assets',
     byId: (id: string) => `/assets/${enc(id)}`,
     assessments: (id: string) => `/assets/${enc(id)}/assessments`,
     workspace: (id: string) => `/assets/${enc(id)}/workspace`,
-    collaborators: (id: string) => `/assets/${enc(id)}/collaborators`
+    collaborators: (id: string) => `/assets/${enc(id)}/collaborators`,
+    /** AI extraction of the asset's uploaded CDP / CI / Protocol files: POST starts it (202), GET reads the state of the last run. */
+    extraction: (id: string) => `/assets/${enc(id)}/extraction`
   },
   documents: {
     list: '/documents',
@@ -32,31 +36,26 @@ export const endpoints = {
     download: (id: number) => `/documents/${id}/download`
   },
   /** Data Submission: the set-up form and every file in one request, then a server extraction job. */
-  submissions: {
-    create: '/assets/submissions',
-    job: (assetId: string, jobId: number) => `/assets/${enc(assetId)}/extract/${jobId}`,
-    latest: (assetId: string) => `/assets/${enc(assetId)}/extract/latest`,
-    retry: (assetId: string) => `/assets/${enc(assetId)}/extract/retry`
-  },
   inputs: {
     fields: '/fields',
     fieldsForAsset: (assetId: string) => `/assets/${enc(assetId)}/fields`,
     field: (id: string) => `/fields/${enc(id)}`,
     questions: '/questions',
     questionsForAsset: (assetId: string) => `/assets/${enc(assetId)}/questions`,
-    question: (id: string) => `/questions/${enc(id)}`,
-    extract: (assetId: string) => `/assets/${enc(assetId)}/extract`
+    question: (id: string) => `/questions/${enc(id)}`
   },
   assessment: {
     runEligibility: (assetId: string) => `/assets/${enc(assetId)}/eligibility/run`,
     runImpact: (assetId: string) => `/assets/${enc(assetId)}/impact/run`,
     scenarios: (assetId: string) => `/assets/${enc(assetId)}/scenarios`
   },
+  /** User management on the AI team's structx.sqlite (user, role, user_asset). */
   users: {
-    list: '/users',
-    create: '/users',
-    byId: (id: number) => `/users/${id}`,
-    resendInvite: (id: number) => `/users/${id}/invite`
+    list: '/structx/users',
+    create: '/structx/users',
+    byId: (id: number) => `/structx/users/${id}`,
+    status: (id: number) => `/structx/users/${id}/status`,
+    resendInvite: (id: number) => `/structx/users/${id}/invite`
   },
   governance: {
     policyVersions: '/policy-versions',
